@@ -37,6 +37,23 @@ Qepton is a code snippet manager powered by GitHub Gist. It's a multi-platform a
 - **Router**: `src/router/routes.ts`
 - **Stores**: `src/stores/` (auth.ts, gists.ts, ui.ts, search.ts, settings.ts)
 
+## Key Dependencies
+
+**Main**:
+- `quasar` ^2.14.0, `vue` ^3.4.0, `vue-router` ^4.2.5, `pinia` ^2.1.7 - Vue/Quasar ecosystem
+- `axios` ^1.6.5 - HTTP client for GitHub API
+- `vue-codemirror` ^6.1.1 with CodeMirror 6 language packages - Code editor
+- `markdown-it` ^14.0.0 - Markdown rendering
+- `fuse.js` ^7.0.0 - Fuzzy search
+- `highlight.js` ^11.9.0 - Syntax highlighting
+
+**Development**:
+- `electron` ^28.1.0, `electron-builder` ^24.9.1 - Desktop builds
+- `@capacitor/core` ^5.6.0 - Mobile builds
+- `vitest` ^1.1.1, `@vue/test-utils` ^2.4.3 - Unit testing
+- `@playwright/test` ^1.57.0 - E2E testing
+- `typescript` ^5.3.3, `eslint` ^8.56.0, `prettier` ^3.1.1 - Code quality
+
 ## Common Commands
 
 ```bash
