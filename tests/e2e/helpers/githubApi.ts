@@ -38,13 +38,13 @@ export async function createGistViaAPI(gist: TestGist): Promise<GitHubGist> {
       Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json',
-      'X-GitHub-Api-Version': '2022-11-28',
+      'X-GitHub-Api-Version': '2022-11-28'
     },
     body: JSON.stringify({
       description: gist.description,
       public: gist.public,
-      files: gist.files,
-    }),
+      files: gist.files
+    })
   })
 
   if (!response.ok) {
@@ -66,8 +66,8 @@ export async function deleteGistViaAPI(gistId: string): Promise<void> {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
   })
 
   if (!response.ok && response.status !== 404) {
@@ -86,8 +86,8 @@ export async function listGistsViaAPI(): Promise<GitHubGist[]> {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
   })
 
   if (!response.ok) {
@@ -103,7 +103,7 @@ export async function listGistsViaAPI(): Promise<GitHubGist[]> {
  */
 export async function findGistsByTag(tag: string): Promise<GitHubGist[]> {
   const gists = await listGistsViaAPI()
-  return gists.filter((g) => g.description?.includes(`#${tag}`))
+  return gists.filter(g => g.description?.includes(`#${tag}`))
 }
 
 /**
@@ -131,7 +131,7 @@ export async function deleteGistsByTag(tag: string): Promise<number> {
 export async function cleanupTestGists(): Promise<number> {
   const gists = await listGistsViaAPI()
   const testGists = gists.filter(
-    (g) =>
+    g =>
       g.description?.includes('#automated-test') ||
       g.description?.includes('#e2e-test') ||
       g.description?.includes('[E2E Test]')
@@ -160,8 +160,8 @@ export async function getCurrentUser(): Promise<{ login: string; id: number; ava
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
   })
 
   if (!response.ok) {

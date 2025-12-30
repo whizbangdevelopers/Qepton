@@ -6,7 +6,6 @@ import { loginWithToken } from './helpers'
  * Uses the wriver4-test account configured in e2e-docker/.env
  */
 test.describe('Authentication', () => {
-
   test('should show login page when not authenticated', async ({ page }) => {
     // Clear any existing auth and go to home
     await page.goto('/')

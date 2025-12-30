@@ -22,7 +22,7 @@ export default {
     loginWithOAuth: 'Iniciar con GitHub',
     loginWithToken: 'Iniciar con Token',
     tokenPlaceholder: 'Token de Acceso Personal de GitHub',
-    tokenHint: 'Pega tu token de GitHub con el permiso \'gist\'',
+    tokenHint: "Pega tu token de GitHub con el permiso 'gist'",
     tokenRequired: 'El token es obligatorio',
     invalidToken: 'Token de GitHub inválido',
     generateToken: 'Generar un nuevo token',

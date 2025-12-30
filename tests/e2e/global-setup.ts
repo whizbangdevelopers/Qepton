@@ -13,10 +13,10 @@ function checkGitHubApiHealth(): boolean {
   console.log('Step 1: Checking GitHub API accessibility...')
 
   try {
-    const result = execSync(
-      'curl -s -w "\\n%{http_code}" https://api.github.com',
-      { encoding: 'utf-8', timeout: 15000 }
-    )
+    const result = execSync('curl -s -w "\\n%{http_code}" https://api.github.com', {
+      encoding: 'utf-8',
+      timeout: 15000
+    })
 
     const lines = result.trim().split('\n')
     const httpCode = lines.pop()
@@ -106,7 +106,9 @@ async function globalSetup() {
     console.error('  ✗ GITHUB_TEST_TOKEN environment variable is not set.')
     console.error('')
     console.error('To fix this:')
-    console.error('  1. Generate a token at: https://github.com/settings/tokens/new?scopes=gist&description=Qepton')
+    console.error(
+      '  1. Generate a token at: https://github.com/settings/tokens/new?scopes=gist&description=Qepton'
+    )
     console.error('  2. Set the environment variable:')
     console.error('     export GITHUB_TEST_TOKEN=ghp_your_token_here')
     console.error('')
@@ -152,7 +154,9 @@ async function globalSetup() {
         console.error('The token is invalid or has been revoked.')
         console.error('')
         console.error('To fix this:')
-        console.error('  1. Generate a new token at: https://github.com/settings/tokens/new?scopes=gist&description=Qepton')
+        console.error(
+          '  1. Generate a new token at: https://github.com/settings/tokens/new?scopes=gist&description=Qepton'
+        )
         console.error('  2. Update GITHUB_TEST_TOKEN with the new token')
       } else if (httpCode === '403') {
         console.error('The token does not have sufficient permissions or rate limit exceeded.')
@@ -173,7 +177,6 @@ async function globalSetup() {
     console.log('All pre-flight checks passed!')
     console.log('Proceeding with E2E tests...')
     console.log('========================================\n')
-
   } catch (error) {
     console.error('  ✗ Failed to validate token')
     console.error('')

@@ -145,7 +145,7 @@ const MOCK_GISTS = [
  * Uses octocat as the mock user (GitHub's official sample user)
  */
 export async function mockGitHubAPI(page: Page): Promise<void> {
-  await page.route('**/api.github.com/**', async (route) => {
+  await page.route('**/api.github.com/**', async route => {
     const url = route.request().url()
     const method = route.request().method()
 
@@ -160,7 +160,7 @@ export async function mockGitHubAPI(page: Page): Promise<void> {
     }
 
     // Mock gists list endpoint
-    if (url.match(/\/gists\/?$/) || url.includes('/users/') && url.includes('/gists')) {
+    if (url.match(/\/gists\/?$/) || (url.includes('/users/') && url.includes('/gists'))) {
       if (method === 'GET') {
         await route.fulfill({
           status: 200,

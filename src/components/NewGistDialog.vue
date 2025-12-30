@@ -40,11 +40,7 @@
           <!-- Files -->
           <div class="text-subtitle1 q-mt-md">Files</div>
 
-          <div
-            v-for="(file, index) in files"
-            :key="index"
-            class="file-entry q-mb-md"
-          >
+          <div v-for="(file, index) in files" :key="index" class="file-entry q-mb-md">
             <div class="row q-col-gutter-sm items-center q-mb-sm">
               <div class="col">
                 <q-input
@@ -53,7 +49,10 @@
                   placeholder="example.js"
                   outlined
                   dense
-                  :rules="[val => !!val || 'Filename is required', val => isValidFilename(val) || 'Invalid filename']"
+                  :rules="[
+                    val => !!val || 'Filename is required',
+                    val => isValidFilename(val) || 'Invalid filename'
+                  ]"
                   data-test="file-name"
                 />
               </div>
@@ -97,12 +96,7 @@
 
       <!-- Actions -->
       <q-card-actions align="right" class="q-pa-md">
-        <q-btn
-          flat
-          label="Cancel"
-          @click="handleClose"
-          data-test="cancel-button"
-        />
+        <q-btn flat label="Cancel" @click="handleClose" data-test="cancel-button" />
         <q-btn
           color="primary"
           label="Create Gist"
@@ -139,11 +133,14 @@ const files = ref<FileEntry[]>([{ filename: '', content: '' }])
 const isSubmitting = ref(false)
 
 // Reset form when dialog opens
-watch(() => uiStore.modals.newGist, (isOpen) => {
-  if (isOpen) {
-    resetForm()
+watch(
+  () => uiStore.modals.newGist,
+  isOpen => {
+    if (isOpen) {
+      resetForm()
+    }
   }
-})
+)
 
 function resetForm() {
   description.value = ''

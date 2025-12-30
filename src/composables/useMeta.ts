@@ -22,16 +22,17 @@ export interface MetaOptions {
  * Set page meta with dynamic title
  */
 export function usePageMeta(options: MetaOptions = {}) {
-  const title = options.title
-    ? `${options.title} - ${APP_NAME}`
-    : APP_NAME
+  const title = options.title ? `${options.title} - ${APP_NAME}` : APP_NAME
 
   useMeta({
     title,
     meta: {
       description: { name: 'description', content: options.description || 'Code Snippet Manager' },
       ogTitle: { property: 'og:title', content: options.ogTitle || title },
-      ogDescription: { property: 'og:description', content: options.ogDescription || options.description || '' }
+      ogDescription: {
+        property: 'og:description',
+        content: options.ogDescription || options.description || ''
+      }
     }
   })
 }

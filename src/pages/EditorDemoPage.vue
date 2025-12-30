@@ -36,7 +36,7 @@
           </q-card-section>
           <q-card-section>
             <div class="text-caption text-grey">
-              <strong>Pros:</strong> Full IDE features, IntelliSense, VS Code experience<br>
+              <strong>Pros:</strong> Full IDE features, IntelliSense, VS Code experience<br />
               <strong>Cons:</strong> Large bundle size (~5MB), requires worker setup
             </div>
           </q-card-section>
@@ -77,7 +77,7 @@
           </q-card-section>
           <q-card-section>
             <div class="text-caption text-grey">
-              <strong>Pros:</strong> Lightweight, modular, modern ES6 architecture<br>
+              <strong>Pros:</strong> Lightweight, modular, modern ES6 architecture<br />
               <strong>Cons:</strong> Less IDE-like, manual language setup
             </div>
           </q-card-section>
@@ -149,11 +149,7 @@
         <div class="text-h6 q-mb-sm">Load Performance</div>
         <div class="row q-col-gutter-md">
           <div class="col-6">
-            <q-linear-progress
-              :value="monacoLoaded ? 1 : 0"
-              color="primary"
-              class="q-mb-xs"
-            />
+            <q-linear-progress :value="monacoLoaded ? 1 : 0" color="primary" class="q-mb-xs" />
             <div class="text-caption">
               Monaco: {{ monacoLoadTime ? `${monacoLoadTime}ms` : 'Loading...' }}
             </div>
@@ -173,12 +169,7 @@
     </q-card>
 
     <div class="q-mt-md text-center">
-      <q-btn
-        label="Back to Dashboard"
-        color="primary"
-        outline
-        to="/"
-      />
+      <q-btn label="Back to Dashboard" color="primary" outline to="/" />
     </div>
   </q-page>
 </template>
@@ -232,7 +223,7 @@ const monacoOptions = {
   scrollBeyondLastLine: false,
   automaticLayout: true,
   tabSize: 2,
-  wordWrap: 'on' as const,
+  wordWrap: 'on' as const
 }
 
 function handleMonacoMount() {
@@ -254,7 +245,7 @@ const languageMap: Record<string, () => ReturnType<typeof javascript>> = {
   html: () => html(),
   css: () => css(),
   json: () => json(),
-  markdown: () => markdown(),
+  markdown: () => markdown()
 }
 
 const codemirrorExtensions = computed(() => {
@@ -282,7 +273,7 @@ const languageOptions = [
   { label: 'HTML', value: 'html' },
   { label: 'CSS', value: 'css' },
   { label: 'JSON', value: 'json' },
-  { label: 'Markdown', value: 'markdown' },
+  { label: 'Markdown', value: 'markdown' }
 ]
 </script>
 

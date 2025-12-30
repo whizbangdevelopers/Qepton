@@ -164,20 +164,22 @@ function setupMenu() {
   const template: Electron.MenuItemConstructorOptions[] = [
     // App menu (macOS only)
     ...(isMac
-      ? [{
-          label: app.name,
-          submenu: [
-            { role: 'about' as const },
-            { type: 'separator' as const },
-            { role: 'services' as const },
-            { type: 'separator' as const },
-            { role: 'hide' as const },
-            { role: 'hideOthers' as const },
-            { role: 'unhide' as const },
-            { type: 'separator' as const },
-            { role: 'quit' as const }
-          ]
-        }]
+      ? [
+          {
+            label: app.name,
+            submenu: [
+              { role: 'about' as const },
+              { type: 'separator' as const },
+              { role: 'services' as const },
+              { type: 'separator' as const },
+              { role: 'hide' as const },
+              { role: 'hideOthers' as const },
+              { role: 'unhide' as const },
+              { type: 'separator' as const },
+              { role: 'quit' as const }
+            ]
+          }
+        ]
       : []),
 
     // File menu
@@ -302,7 +304,7 @@ function setupAutoUpdater() {
     return // Don't check for updates in development
   }
 
-  autoUpdater.on('error', (error) => {
+  autoUpdater.on('error', error => {
     console.error('Auto-updater error:', error)
   })
 
@@ -310,7 +312,7 @@ function setupAutoUpdater() {
     console.log('Checking for updates...')
   })
 
-  autoUpdater.on('update-available', (info) => {
+  autoUpdater.on('update-available', info => {
     console.log('Update available:', info.version)
     mainWindow?.webContents.send('update-available', info)
   })
@@ -319,11 +321,11 @@ function setupAutoUpdater() {
     console.log('No updates available')
   })
 
-  autoUpdater.on('download-progress', (progressObj) => {
+  autoUpdater.on('download-progress', progressObj => {
     mainWindow?.webContents.send('download-progress', progressObj)
   })
 
-  autoUpdater.on('update-downloaded', (info) => {
+  autoUpdater.on('update-downloaded', info => {
     mainWindow?.webContents.send('update-downloaded', info)
   })
 

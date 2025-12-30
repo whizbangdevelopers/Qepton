@@ -49,31 +49,33 @@ export const useGistsStore = defineStore('gists', {
     /**
      * Get gists for a specific tag
      */
-    gistsByTag: (state) => (tag: string): Gist[] => {
-      if (tag === 'All Gists') {
-        return Object.values(state.gists).sort(
-          (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-        )
-      }
+    gistsByTag:
+      state =>
+      (tag: string): Gist[] => {
+        if (tag === 'All Gists') {
+          return Object.values(state.gists).sort(
+            (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          )
+        }
 
-      if (tag === 'Starred') {
-        return Object.values(state.starredGists).sort(
-          (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-        )
-      }
+        if (tag === 'Starred') {
+          return Object.values(state.starredGists).sort(
+            (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          )
+        }
 
-      if (tag === 'Recents') {
-        return state.recentGists
-          .map(r => state.gists[r.id] || state.starredGists[r.id])
+        if (tag === 'Recents') {
+          return state.recentGists
+            .map(r => state.gists[r.id] || state.starredGists[r.id])
+            .filter(Boolean)
+        }
+
+        const gistIds = state.gistTags[tag] || new Set()
+        return Array.from(gistIds)
+          .map(id => state.gists[id])
           .filter(Boolean)
-      }
-
-      const gistIds = state.gistTags[tag] || new Set()
-      return Array.from(gistIds)
-        .map(id => state.gists[id])
-        .filter(Boolean)
-        .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-    },
+          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      },
 
     /**
      * Get recent gists array (sorted by most recently viewed)
@@ -119,17 +121,19 @@ export const useGistsStore = defineStore('gists', {
     /**
      * Get tag info with counts
      */
-    tagInfo: (state) => (tag: string): TagInfo | null => {
-      const gistIds = state.gistTags[tag]
-      if (!gistIds) return null
+    tagInfo:
+      state =>
+      (tag: string): TagInfo | null => {
+        const gistIds = state.gistTags[tag]
+        if (!gistIds) return null
 
-      return {
-        name: tag,
-        count: gistIds.size,
-        gistIds: Array.from(gistIds),
-        type: tag.startsWith('lang@') ? 'language' : 'custom'
-      }
-    },
+        return {
+          name: tag,
+          count: gistIds.size,
+          gistIds: Array.from(gistIds),
+          type: tag.startsWith('lang@') ? 'language' : 'custom'
+        }
+      },
 
     /**
      * Get total gist count
@@ -141,7 +145,9 @@ export const useGistsStore = defineStore('gists', {
     /**
      * Get statistics
      */
-    stats: (state): { totalGists: number; totalTags: number; languageTags: number; customTags: number } => {
+    stats: (
+      state
+    ): { totalGists: number; totalTags: number; languageTags: number; customTags: number } => {
       const allTags = Object.keys(state.gistTags)
       return {
         totalGists: Object.keys(state.gists).length,
@@ -170,23 +176,29 @@ export const useGistsStore = defineStore('gists', {
     /**
      * Check if a gist is starred
      */
-    isStarred: (state) => (gistId: string): boolean => {
-      return state.starredGistIds.has(gistId)
-    },
+    isStarred:
+      state =>
+      (gistId: string): boolean => {
+        return state.starredGistIds.has(gistId)
+      },
 
     /**
      * Check if a gist has full content loaded
      */
-    isGistLoaded: (state) => (gistId: string): boolean => {
-      return state.loadedGistIds.has(gistId)
-    },
+    isGistLoaded:
+      state =>
+      (gistId: string): boolean => {
+        return state.loadedGistIds.has(gistId)
+      },
 
     /**
      * Check if a gist is currently loading
      */
-    isGistLoading: (state) => (gistId: string): boolean => {
-      return state.loadingGistId === gistId
-    }
+    isGistLoading:
+      state =>
+      (gistId: string): boolean => {
+        return state.loadingGistId === gistId
+      }
   },
 
   actions: {
@@ -310,7 +322,11 @@ export const useGistsStore = defineStore('gists', {
     /**
      * Create a new gist
      */
-    async createGist(description: string, files: Record<string, { content: string }>, isPublic: boolean = true): Promise<Gist> {
+    async createGist(
+      description: string,
+      files: Record<string, { content: string }>,
+      isPublic: boolean = true
+    ): Promise<Gist> {
       try {
         console.debug('[Gists] Creating new gist')
 
@@ -338,7 +354,11 @@ export const useGistsStore = defineStore('gists', {
     /**
      * Update an existing gist
      */
-    async updateGist(gistId: string, description: string, files: Record<string, { content: string } | null>): Promise<Gist> {
+    async updateGist(
+      gistId: string,
+      description: string,
+      files: Record<string, { content: string } | null>
+    ): Promise<Gist> {
       try {
         console.debug('[Gists] Updating gist:', gistId)
 

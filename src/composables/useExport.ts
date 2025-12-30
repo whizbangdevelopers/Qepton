@@ -27,27 +27,29 @@ export function useExport() {
    * Export a single gist to JSON format
    */
   function exportGistToJSON(gist: Gist, includeMetadata = true): ExportResult {
-    const data = includeMetadata ? {
-      id: gist.id,
-      description: gist.description,
-      public: gist.public,
-      created_at: gist.created_at,
-      updated_at: gist.updated_at,
-      files: gist.files,
-      owner: {
-        login: gist.owner?.login,
-        avatar_url: gist.owner?.avatar_url
-      },
-      html_url: gist.html_url
-    } : {
-      description: gist.description,
-      files: Object.fromEntries(
-        Object.entries(gist.files).map(([name, file]: [string, GistFile]) => [
-          name,
-          { filename: file.filename, content: file.content }
-        ])
-      )
-    }
+    const data = includeMetadata
+      ? {
+          id: gist.id,
+          description: gist.description,
+          public: gist.public,
+          created_at: gist.created_at,
+          updated_at: gist.updated_at,
+          files: gist.files,
+          owner: {
+            login: gist.owner?.login,
+            avatar_url: gist.owner?.avatar_url
+          },
+          html_url: gist.html_url
+        }
+      : {
+          description: gist.description,
+          files: Object.fromEntries(
+            Object.entries(gist.files).map(([name, file]: [string, GistFile]) => [
+              name,
+              { filename: file.filename, content: file.content }
+            ])
+          )
+        }
 
     return {
       filename: `gist-${gist.id}.json`,
@@ -123,10 +125,12 @@ export function useExport() {
           created_at: gist.created_at,
           updated_at: gist.updated_at,
           files: gist.files,
-          owner: gist.owner ? {
-            login: gist.owner.login,
-            avatar_url: gist.owner.avatar_url
-          } : undefined,
+          owner: gist.owner
+            ? {
+                login: gist.owner.login,
+                avatar_url: gist.owner.avatar_url
+              }
+            : undefined,
           html_url: gist.html_url
         }
       }
@@ -145,7 +149,11 @@ export function useExport() {
 
     return {
       filename: `gists-export-${timestamp}.json`,
-      content: JSON.stringify({ gists: data, exportedAt: new Date().toISOString(), count: gists.length }, null, 2),
+      content: JSON.stringify(
+        { gists: data, exportedAt: new Date().toISOString(), count: gists.length },
+        null,
+        2
+      ),
       mimeType: 'application/json'
     }
   }
@@ -220,9 +228,10 @@ export function useExport() {
    * Download a file to the user's device
    */
   function downloadFile(result: ExportResult): void {
-    const blob = result.content instanceof Blob
-      ? result.content
-      : new Blob([result.content], { type: result.mimeType })
+    const blob =
+      result.content instanceof Blob
+        ? result.content
+        : new Blob([result.content], { type: result.mimeType })
 
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -324,7 +333,10 @@ export function useExport() {
   /**
    * Copy gist content to clipboard
    */
-  async function copyToClipboard(content: string, message = 'Copied to clipboard'): Promise<boolean> {
+  async function copyToClipboard(
+    content: string,
+    message = 'Copied to clipboard'
+  ): Promise<boolean> {
     try {
       if ('clipboard' in navigator) {
         await navigator.clipboard.writeText(content)

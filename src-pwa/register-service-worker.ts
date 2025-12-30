@@ -63,7 +63,9 @@ register(process.env.SERVICE_WORKER_FILE || '', {
         {
           label: 'Dismiss',
           color: 'white',
-          handler: () => { /* dismiss */ }
+          handler: () => {
+            /* dismiss */
+          }
         }
       ]
     })

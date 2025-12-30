@@ -40,6 +40,7 @@ Qepton is a code snippet manager powered by GitHub Gist. It's a multi-platform a
 ## Key Dependencies
 
 **Main**:
+
 - `quasar` ^2.14.0, `vue` ^3.4.0, `vue-router` ^4.2.5, `pinia` ^2.1.7 - Vue/Quasar ecosystem
 - `axios` ^1.6.5 - HTTP client for GitHub API
 - `vue-codemirror` ^6.1.1 with CodeMirror 6 language packages - Code editor
@@ -48,6 +49,7 @@ Qepton is a code snippet manager powered by GitHub Gist. It's a multi-platform a
 - `highlight.js` ^11.9.0 - Syntax highlighting
 
 **Development**:
+
 - `electron` ^28.1.0, `electron-builder` ^24.9.1 - Desktop builds
 - `@capacitor/core` ^5.6.0 - Mobile builds
 - `vitest` ^1.1.1, `@vue/test-utils` ^2.4.3 - Unit testing
@@ -103,6 +105,7 @@ The `playwright.config.ts` at the project root is used by the Docker container (
 ### State Management
 
 Pinia stores manage application state:
+
 - **auth** (`src/stores/auth.ts`) - GitHub OAuth token, user profile
 - **gists** (`src/stores/gists.ts`) - Gist data, tags (language tags prefixed with `lang@`, custom tags without prefix), sync state
 - **ui** (`src/stores/ui.ts`) - Theme, dashboard mode, UI preferences
@@ -140,6 +143,7 @@ E2E tests use `globalSetup` in `tests/e2e/global-setup.ts` to validate GitHub to
 ## Path Aliases
 
 Configured in `tsconfig.json` and `vitest.config.ts`:
+
 - `src/*` → `./src/*`
 - `components/*` → `./src/components/*`
 - `stores/*` → `./src/stores/*`

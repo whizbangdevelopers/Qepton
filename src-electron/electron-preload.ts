@@ -53,7 +53,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('update-available', callback)
     return () => ipcRenderer.removeListener('update-available', callback)
   },
-  onDownloadProgress: (callback: (event: Electron.IpcRendererEvent, progress: DownloadProgress) => void) => {
+  onDownloadProgress: (
+    callback: (event: Electron.IpcRendererEvent, progress: DownloadProgress) => void
+  ) => {
     ipcRenderer.on('download-progress', callback)
     return () => ipcRenderer.removeListener('download-progress', callback)
   },
@@ -107,9 +109,15 @@ declare global {
       onMenuToggleSearch: (callback: () => void) => () => void
 
       // Update listeners (return cleanup function)
-      onUpdateAvailable: (callback: (event: Electron.IpcRendererEvent, info: UpdateInfo) => void) => () => void
-      onDownloadProgress: (callback: (event: Electron.IpcRendererEvent, progress: DownloadProgress) => void) => () => void
-      onUpdateDownloaded: (callback: (event: Electron.IpcRendererEvent, info: UpdateInfo) => void) => () => void
+      onUpdateAvailable: (
+        callback: (event: Electron.IpcRendererEvent, info: UpdateInfo) => void
+      ) => () => void
+      onDownloadProgress: (
+        callback: (event: Electron.IpcRendererEvent, progress: DownloadProgress) => void
+      ) => () => void
+      onUpdateDownloaded: (
+        callback: (event: Electron.IpcRendererEvent, info: UpdateInfo) => void
+      ) => () => void
 
       // Update actions
       quitAndInstall: () => Promise<void>

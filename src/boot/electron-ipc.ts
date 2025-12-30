@@ -35,10 +35,7 @@ export default boot(() => {
   cleanups.push(
     window.electronAPI.onMenuSyncGists(async () => {
       console.debug('[Electron IPC] Menu: Sync Gists')
-      await Promise.all([
-        gistsStore.syncGists(),
-        gistsStore.syncStarredGists()
-      ])
+      await Promise.all([gistsStore.syncGists(), gistsStore.syncStarredGists()])
     })
   )
 

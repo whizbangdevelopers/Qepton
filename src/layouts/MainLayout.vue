@@ -3,9 +3,7 @@
     <!-- Header (hidden in immersive mode) -->
     <q-header v-if="!uiStore.immersiveMode" elevated>
       <q-toolbar>
-        <q-toolbar-title class="text-h6">
-          Qepton
-        </q-toolbar-title>
+        <q-toolbar-title class="text-h6"> Qepton </q-toolbar-title>
 
         <q-space />
 
@@ -145,10 +143,7 @@ function toggleTheme() {
 
 async function handleSync() {
   try {
-    await Promise.all([
-      gistsStore.syncGists(),
-      gistsStore.syncStarredGists()
-    ])
+    await Promise.all([gistsStore.syncGists(), gistsStore.syncStarredGists()])
     $q.notify({
       type: 'positive',
       message: `Synced ${gistsStore.totalGists} gists`,

@@ -13,7 +13,15 @@ export { useUIStore } from './ui'
 export { useSearchStore } from './search'
 
 // Re-export types for convenience
-export type { AuthState, GistsState, UIState, SearchState, ModalStates, TagInfo, UpdateInfo } from 'src/types/store'
+export type {
+  AuthState,
+  GistsState,
+  UIState,
+  SearchState,
+  ModalStates,
+  TagInfo,
+  UpdateInfo
+} from 'src/types/store'
 
 // Quasar requires a default export for the store feature
 export default store((/* { ssrContext } */) => {

@@ -4,6 +4,18 @@ module.exports = {
   // Remove this if you have an higher level ESLint config file (it usually happens into a monorepos)
   root: true,
 
+  ignorePatterns: [
+    'node_modules/',
+    'dist/',
+    '.quasar/',
+    'e2e-docker/output/',
+    'src-capacitor/',
+    'src-cordova/',
+    'src-electron/dist/',
+    'playwright-report/',
+    'test-results/'
+  ],
+
   parser: 'vue-eslint-parser',
   parserOptions: {
     ecmaVersion: '2021', // Allows for the parsing of modern ECMAScript features
@@ -30,7 +42,10 @@ module.exports = {
     // 'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
 
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
+
+    // Prettier must be last to override conflicting rules
+    'prettier'
   ],
 
   plugins: [
@@ -78,9 +93,6 @@ module.exports = {
     'import/named': 'off',
 
     'prefer-const': 'error',
-
-    // TypeScript
-    quotes: ['warn', 'single', { avoidEscape: true }],
 
     // this rule, if on, would require explicit return type on the `render` function
     '@typescript-eslint/explicit-function-return-type': 'off',

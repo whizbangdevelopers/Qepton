@@ -50,7 +50,7 @@ export const useSettingsStore = defineStore('settings', {
 
       try {
         const remote = await settingsSync.loadRemoteSettings()
-        
+
         if (remote) {
           this.applySettings(remote)
           this.lastSyncTime = Date.now()
@@ -96,6 +96,8 @@ export const useSettingsStore = defineStore('settings', {
         savedSearches: searchStore.savedSearches,
         immersiveMode: uiStore.immersiveMode,
         navDrawers: { ...uiStore.navDrawers },
+        gistListView: uiStore.gistListView,
+        gistSort: { ...uiStore.gistSort },
         lastModified: Date.now()
       }
     },
@@ -123,6 +125,12 @@ export const useSettingsStore = defineStore('settings', {
       if (settings.navDrawers) {
         uiStore.$patch({ navDrawers: settings.navDrawers })
       }
+      if (settings.gistListView) {
+        uiStore.$patch({ gistListView: settings.gistListView })
+      }
+      if (settings.gistSort) {
+        uiStore.$patch({ gistSort: settings.gistSort })
+      }
 
       console.debug('[Settings] Applied settings from sync')
     },
@@ -145,7 +153,9 @@ export const useSettingsStore = defineStore('settings', {
       }
     },
 
-    syncSavedSearches(searches: Array<{ id: string; query: string; name: string; createdAt: number }>): void {
+    syncSavedSearches(
+      searches: Array<{ id: string; query: string; name: string; createdAt: number }>
+    ): void {
       if (this.syncEnabled) {
         settingsSync.saveSettings({ savedSearches: searches })
       }

@@ -131,22 +131,22 @@ function getLanguageExtension(lang: string) {
 
 const extensions = computed(() => {
   const exts = []
-  
+
   if ($q.dark.isActive) {
     exts.push(oneDark)
   }
-  
+
   const langExt = getLanguageExtension(detectedLanguage.value)
   if (langExt) {
     exts.push(langExt)
   }
-  
+
   exts.push(EditorView.lineWrapping)
-  
+
   if (props.readonly) {
     exts.push(EditorView.editable.of(false))
   }
-  
+
   return exts
 })
 
@@ -164,20 +164,20 @@ function handleUpdate(value: string) {
   border: 1px solid var(--border-color);
   border-radius: 4px;
   overflow: hidden;
-  
+
   :deep(.cm-editor) {
     font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
     font-size: 14px;
   }
-  
+
   :deep(.cm-focused) {
     outline: none;
   }
-  
+
   :deep(.cm-scroller) {
     overflow: auto;
   }
-  
+
   &.read-only {
     :deep(.cm-editor) {
       background: var(--bg-secondary);

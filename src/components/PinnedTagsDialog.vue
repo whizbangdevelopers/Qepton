@@ -27,7 +27,12 @@
         </q-input>
 
         <div class="text-subtitle2 q-mb-sm">Pinned Tags</div>
-        <q-list v-if="gistsStore.pinnedTags.length > 0" dense bordered class="rounded-borders q-mb-md">
+        <q-list
+          v-if="gistsStore.pinnedTags.length > 0"
+          dense
+          bordered
+          class="rounded-borders q-mb-md"
+        >
           <q-item
             v-for="tag in gistsStore.pinnedTags"
             :key="tag"
@@ -53,12 +58,7 @@
 
         <div class="text-subtitle2 q-mb-sm">Available Tags</div>
         <q-list dense bordered class="rounded-borders available-tags">
-          <q-item
-            v-for="tag in filteredTags"
-            :key="tag"
-            clickable
-            @click="gistsStore.pinTag(tag)"
-          >
+          <q-item v-for="tag in filteredTags" :key="tag" clickable @click="gistsStore.pinTag(tag)">
             <q-item-section avatar>
               <q-icon
                 :name="tag.startsWith('lang@') ? 'code' : 'label'"
@@ -95,16 +95,12 @@ const gistsStore = useGistsStore()
 const filter = ref('')
 
 const filteredTags = computed(() => {
-  const allTags = gistsStore.allTags.filter(
-    tag => !gistsStore.pinnedTags.includes(tag)
-  )
+  const allTags = gistsStore.allTags.filter(tag => !gistsStore.pinnedTags.includes(tag))
 
   if (!filter.value) return allTags
 
   const lowerFilter = filter.value.toLowerCase()
-  return allTags.filter(tag =>
-    formatTagName(tag).toLowerCase().includes(lowerFilter)
-  )
+  return allTags.filter(tag => formatTagName(tag).toLowerCase().includes(lowerFilter))
 })
 
 function formatTagName(tag: string): string {

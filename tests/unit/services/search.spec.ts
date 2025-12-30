@@ -60,8 +60,20 @@ describe('Search Service', () => {
     it('should create multiple entries for multi-file gists', () => {
       const gist = createMockGist({
         files: {
-          'file1.js': { filename: 'file1.js', language: 'JavaScript', type: 'text/javascript', raw_url: '', size: 100 },
-          'file2.py': { filename: 'file2.py', language: 'Python', type: 'text/python', raw_url: '', size: 100 }
+          'file1.js': {
+            filename: 'file1.js',
+            language: 'JavaScript',
+            type: 'text/javascript',
+            raw_url: '',
+            size: 100
+          },
+          'file2.py': {
+            filename: 'file2.py',
+            language: 'Python',
+            type: 'text/python',
+            raw_url: '',
+            size: 100
+          }
         }
       })
 
@@ -88,21 +100,39 @@ describe('Search Service', () => {
           id: 'gist-1',
           description: 'JavaScript utility functions',
           files: {
-            'utils.js': { filename: 'utils.js', language: 'JavaScript', type: 'text/javascript', raw_url: '', size: 100 }
+            'utils.js': {
+              filename: 'utils.js',
+              language: 'JavaScript',
+              type: 'text/javascript',
+              raw_url: '',
+              size: 100
+            }
           }
         }),
         createMockGist({
           id: 'gist-2',
           description: 'Python data analysis scripts',
           files: {
-            'analysis.py': { filename: 'analysis.py', language: 'Python', type: 'text/python', raw_url: '', size: 100 }
+            'analysis.py': {
+              filename: 'analysis.py',
+              language: 'Python',
+              type: 'text/python',
+              raw_url: '',
+              size: 100
+            }
           }
         }),
         createMockGist({
           id: 'gist-3',
           description: 'React component examples',
           files: {
-            'component.tsx': { filename: 'component.tsx', language: 'TypeScript', type: 'text/typescript', raw_url: '', size: 100 }
+            'component.tsx': {
+              filename: 'component.tsx',
+              language: 'TypeScript',
+              type: 'text/typescript',
+              raw_url: '',
+              size: 100
+            }
           }
         })
       ])
@@ -140,8 +170,20 @@ describe('Search Service', () => {
           id: 'multi-file',
           description: 'test description',
           files: {
-            'test1.js': { filename: 'test1.js', language: 'JavaScript', type: 'text/javascript', raw_url: '', size: 100 },
-            'test2.js': { filename: 'test2.js', language: 'JavaScript', type: 'text/javascript', raw_url: '', size: 100 }
+            'test1.js': {
+              filename: 'test1.js',
+              language: 'JavaScript',
+              type: 'text/javascript',
+              raw_url: '',
+              size: 100
+            },
+            'test2.js': {
+              filename: 'test2.js',
+              language: 'JavaScript',
+              type: 'text/javascript',
+              raw_url: '',
+              size: 100
+            }
           }
         })
       ])
@@ -191,21 +233,39 @@ describe('Search Service', () => {
             id: 'gist-1',
             description: 'JavaScript utility',
             files: {
-              'utils.js': { filename: 'utils.js', language: 'JavaScript', type: 'text/javascript', raw_url: '', size: 100 }
+              'utils.js': {
+                filename: 'utils.js',
+                language: 'JavaScript',
+                type: 'text/javascript',
+                raw_url: '',
+                size: 100
+              }
             }
           }),
           createMockGist({
             id: 'gist-2',
             description: 'Python scripts',
             files: {
-              'scripts.py': { filename: 'scripts.py', language: 'Python', type: 'text/python', raw_url: '', size: 100 }
+              'scripts.py': {
+                filename: 'scripts.py',
+                language: 'Python',
+                type: 'text/python',
+                raw_url: '',
+                size: 100
+              }
             }
           }),
           createMockGist({
             id: 'gist-3',
             description: 'java code',
             files: {
-              'Main.java': { filename: 'Main.java', language: 'Java', type: 'text/java', raw_url: '', size: 100 }
+              'Main.java': {
+                filename: 'Main.java',
+                language: 'Java',
+                type: 'text/java',
+                raw_url: '',
+                size: 100
+              }
             }
           })
         ])
@@ -276,7 +336,7 @@ describe('Search Service', () => {
     describe('addToIndex', () => {
       it('should add gist to existing index', () => {
         searchService.buildIndex([createMockGist({ id: 'gist-1' })])
-        
+
         const newGist = createMockGist({ id: 'gist-2', description: 'New unique gist' })
         searchService.addToIndex(newGist)
 
@@ -291,9 +351,7 @@ describe('Search Service', () => {
 
     describe('updateInIndex', () => {
       it('should update existing gist', () => {
-        searchService.buildIndex([
-          createMockGist({ id: 'gist-1', description: 'Old description' })
-        ])
+        searchService.buildIndex([createMockGist({ id: 'gist-1', description: 'Old description' })])
 
         const updatedGist = createMockGist({ id: 'gist-1', description: 'New updated description' })
         searchService.updateInIndex(updatedGist)
@@ -343,10 +401,7 @@ describe('Search Service', () => {
     })
 
     it('should return correct stats after building index', () => {
-      searchService.buildIndex([
-        createMockGist({ id: 'gist-1' }),
-        createMockGist({ id: 'gist-2' })
-      ])
+      searchService.buildIndex([createMockGist({ id: 'gist-1' }), createMockGist({ id: 'gist-2' })])
 
       const stats = searchService.getIndexStats()
       expect(stats.isInitialized).toBe(true)

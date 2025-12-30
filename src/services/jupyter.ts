@@ -134,9 +134,8 @@ function renderCell(cell: NotebookCell, language: string): string {
  */
 export function renderNotebook(notebookJson: string | object): string {
   try {
-    const data: NotebookData = typeof notebookJson === 'string'
-      ? JSON.parse(notebookJson)
-      : notebookJson
+    const data: NotebookData =
+      typeof notebookJson === 'string' ? JSON.parse(notebookJson) : notebookJson
 
     const language = data.metadata?.language_info?.name || 'python'
     const cells = data.cells.map(cell => renderCell(cell, language)).join('')

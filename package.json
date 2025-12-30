@@ -66,6 +66,7 @@
     "prismjs": "^1.30.0",
     "quasar": "^2.14.0",
     "twitter-text": "^3.1.0",
+    "prettier": "^3.1.1",
     "valid-filename": "^4.0.0",
     "vue": "^3.4.0",
     "vue-codemirror": "^6.1.1",

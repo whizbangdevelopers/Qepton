@@ -32,7 +32,7 @@ class ThemeService {
     }
 
     // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       if (!localStorage.getItem('lepton-theme')) {
         this.setTheme(e.matches ? 'dark' : 'light')
       }

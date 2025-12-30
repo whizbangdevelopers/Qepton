@@ -218,8 +218,8 @@ describe('Jupyter Service', () => {
     it('should render multiple cells', () => {
       const html = renderNotebook(sampleNotebook)
       // Check for presence of different cell types
-      expect(html).toContain('Hello World')  // markdown
-      expect(html).toContain('print')  // code
+      expect(html).toContain('Hello World') // markdown
+      expect(html).toContain('print') // code
     })
   })
 })

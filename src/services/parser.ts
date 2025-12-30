@@ -30,9 +30,7 @@ export function parseDescription(rawDescription: string | null | undefined): Par
   // Extract title from [brackets]
   const titleMatch = description.match(/\[.*?\]/)
   const rawTitle = titleMatch ? titleMatch[0] : ''
-  const title = rawTitle.length > 0
-    ? rawTitle.substring(1, rawTitle.length - 1)
-    : ''
+  const title = rawTitle.length > 0 ? rawTitle.substring(1, rawTitle.length - 1) : ''
 
   // Try parsing custom tags in legacy format first
   let customTags = parseCustomTagsFromLegacy(description)
@@ -45,9 +43,7 @@ export function parseDescription(rawDescription: string | null | undefined): Par
   }
 
   // Extract clean description (remove title and tags)
-  const tagsLength = tagStyle === 'legacy'
-    ? extractLegacyTagsString(description).length
-    : 0
+  const tagsLength = tagStyle === 'legacy' ? extractLegacyTagsString(description).length : 0
 
   const cleanDescription = description
     .substring(rawTitle.length, description.length - tagsLength)
@@ -113,9 +109,7 @@ export function addLangPrefix(language: string | null | undefined): string {
   const lang = language || 'Other'
   const prefix = 'lang@'
 
-  return lang.trim().length > 0
-    ? prefix + lang.trim()
-    : prefix + 'Other'
+  return lang.trim().length > 0 ? prefix + lang.trim() : prefix + 'Other'
 }
 
 /**

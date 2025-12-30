@@ -86,6 +86,15 @@ export interface NavDrawerSettings {
   tagsExpanded: boolean
 }
 
+export type GistListView = 'list' | 'card'
+export type GistSortOption = 'updated' | 'name'
+export type GistSortDirection = 'asc' | 'desc'
+
+export interface GistSortSettings {
+  sortBy: GistSortOption
+  direction: GistSortDirection
+}
+
 export interface UIState {
   // Modal states
   modals: ModalStates
@@ -108,6 +117,12 @@ export interface UIState {
 
   // Navigation drawer settings
   navDrawers: NavDrawerSettings
+
+  // Gist list view mode
+  gistListView: GistListView
+
+  // Gist sort settings
+  gistSort: GistSortSettings
 }
 
 export interface UpdateInfo {

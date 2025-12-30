@@ -15,9 +15,7 @@
         <q-avatar size="80px" color="primary" text-color="white" icon="code" />
         <div class="text-h5 q-mt-md">Qepton</div>
         <div class="text-subtitle1 text-grey">Code Snippet Manager</div>
-        <div class="text-caption text-grey q-mt-xs">
-          Powered by GitHub Gist
-        </div>
+        <div class="text-caption text-grey q-mt-xs">Powered by GitHub Gist</div>
       </q-card-section>
 
       <q-card-section>
@@ -61,9 +59,7 @@
 
       <q-card-section class="text-center text-caption text-grey">
         <div>Qepton = Quasar + Lepton</div>
-        <div class="q-mt-xs">
-          A modern rewrite of the original Lepton project
-        </div>
+        <div class="q-mt-xs">A modern rewrite of the original Lepton project</div>
       </q-card-section>
     </q-card>
   </q-dialog>

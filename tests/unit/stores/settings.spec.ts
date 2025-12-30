@@ -29,7 +29,7 @@ vi.mock('src/services/search', () => ({
 vi.mock('src/services/parser', () => ({
   extractLanguageTags: vi.fn(() => []),
   extractCustomTags: vi.fn(() => []),
-  parseDescription: vi.fn((desc) => ({ title: null, description: desc || '', tags: [] }))
+  parseDescription: vi.fn(desc => ({ title: null, description: desc || '', tags: [] }))
 }))
 
 describe('Settings Store', () => {
@@ -244,7 +244,9 @@ describe('Settings Store', () => {
 
       store.syncPinnedTags(['tag1', 'tag2'])
 
-      expect(vi.mocked(settingsSync).saveSettings).toHaveBeenCalledWith({ pinnedTags: ['tag1', 'tag2'] })
+      expect(vi.mocked(settingsSync).saveSettings).toHaveBeenCalledWith({
+        pinnedTags: ['tag1', 'tag2']
+      })
     })
 
     it('syncActiveTag should save active tag', () => {

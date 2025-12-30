@@ -61,9 +61,7 @@
           </q-item>
         </q-list>
 
-        <div v-else class="q-pa-md text-center text-grey">
-          No results found for "{{ query }}"
-        </div>
+        <div v-else class="q-pa-md text-center text-grey">No results found for "{{ query }}"</div>
       </q-card-section>
 
       <q-card-section v-else-if="query.length === 1" class="q-pa-md text-center text-grey">
@@ -95,12 +93,15 @@ const results = computed(() => {
   return searchService.search(query.value).slice(0, 10)
 })
 
-watch(() => uiStore.modals.search, (isOpen) => {
-  if (isOpen) {
-    query.value = ''
-    focusedIndex.value = 0
+watch(
+  () => uiStore.modals.search,
+  isOpen => {
+    if (isOpen) {
+      query.value = ''
+      focusedIndex.value = 0
+    }
   }
-})
+)
 
 watch(query, () => {
   focusedIndex.value = 0
@@ -146,9 +147,8 @@ function focusNextResult() {
 
 function focusPrevResult() {
   if (results.value.length > 0) {
-    focusedIndex.value = focusedIndex.value === 0 
-      ? results.value.length - 1 
-      : focusedIndex.value - 1
+    focusedIndex.value =
+      focusedIndex.value === 0 ? results.value.length - 1 : focusedIndex.value - 1
   }
 }
 </script>

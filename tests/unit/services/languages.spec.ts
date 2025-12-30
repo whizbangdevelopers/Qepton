@@ -49,7 +49,7 @@ describe('Languages Service', () => {
     it('should not overlap with supported languages', () => {
       const supportedIds = SUPPORTED_LANGUAGES.map(l => l.id)
       const unsupportedIds = UNSUPPORTED_LANGUAGES.map(l => l.id)
-      
+
       unsupportedIds.forEach(id => {
         expect(supportedIds).not.toContain(id)
       })
@@ -59,7 +59,7 @@ describe('Languages Service', () => {
   describe('getLanguageById', () => {
     it('should return language definition for valid id', () => {
       const result = getLanguageById('javascript')
-      
+
       expect(result).toBeDefined()
       expect(result?.id).toBe('javascript')
       expect(result?.name).toBe('JavaScript')
@@ -93,7 +93,7 @@ describe('Languages Service', () => {
   describe('getLanguageByExtension', () => {
     it('should return language for valid extension', () => {
       const result = getLanguageByExtension('js')
-      
+
       expect(result).toBeDefined()
       expect(result?.id).toBe('javascript')
     })

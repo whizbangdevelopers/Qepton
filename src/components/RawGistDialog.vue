@@ -16,24 +16,10 @@
           </q-chip>
         </div>
         <q-space />
-        <q-btn
-          flat
-          round
-          dense
-          icon="unfold_more"
-          @click="expandAll"
-          data-test="expand-all"
-        >
+        <q-btn flat round dense icon="unfold_more" @click="expandAll" data-test="expand-all">
           <q-tooltip>Expand all</q-tooltip>
         </q-btn>
-        <q-btn
-          flat
-          round
-          dense
-          icon="unfold_less"
-          @click="collapseAll"
-          data-test="collapse-all"
-        >
+        <q-btn flat round dense icon="unfold_less" @click="collapseAll" data-test="collapse-all">
           <q-tooltip>Collapse all</q-tooltip>
         </q-btn>
         <q-btn icon="close" flat round dense @click="handleClose" />
@@ -41,11 +27,7 @@
 
       <q-card-section class="raw-content-section">
         <div class="file-accordion">
-          <div 
-            v-for="(file, filename) in files" 
-            :key="filename" 
-            class="file-item-wrapper"
-          >
+          <div v-for="(file, filename) in files" :key="filename" class="file-item-wrapper">
             <q-expansion-item
               :group="fileCount === 1 ? undefined : 'files'"
               :default-opened="fileCount === 1"
@@ -61,13 +43,7 @@
                 <q-item-section>
                   <q-item-label class="file-name">{{ filename }}</q-item-label>
                   <q-item-label caption>
-                    <q-chip
-                      v-if="file.language"
-                      dense
-                      size="sm"
-                      color="grey-8"
-                      text-color="grey-3"
-                    >
+                    <q-chip v-if="file.language" dense size="sm" color="grey-8" text-color="grey-3">
                       {{ file.language }}
                     </q-chip>
                     <span class="text-grey-5 q-ml-sm">{{ formatSize(file.size) }}</span>
@@ -89,19 +65,23 @@
               </template>
 
               <div class="file-content-wrapper">
-                <pre class="file-content" data-test="file-raw-content">{{ file.content || '(empty)' }}</pre>
+                <pre class="file-content" data-test="file-raw-content">{{
+                  file.content || '(empty)'
+                }}</pre>
               </div>
             </q-expansion-item>
-            
-            <div 
-              v-if="!expandedState[String(filename)]" 
+
+            <div
+              v-if="!expandedState[String(filename)]"
               class="file-preview"
               data-test="file-preview"
               @click="expandedState[String(filename)] = true"
             >
               <pre>{{ getPreview(file.content) }}</pre>
               <div v-if="hasMoreLines(file.content)" class="preview-fade">
-                <span class="preview-more">{{ countRemainingLines(file.content) }} more lines - click to expand</span>
+                <span class="preview-more"
+                  >{{ countRemainingLines(file.content) }} more lines - click to expand</span
+                >
               </div>
             </div>
           </div>
@@ -126,15 +106,18 @@ const expandedState = reactive<Record<string, boolean>>({})
 const files = computed(() => gistsStore.activeGist?.files || {})
 const fileCount = computed(() => Object.keys(files.value).length)
 
-watch(() => uiStore.modals.rawGist, (isOpen) => {
-  if (isOpen) {
-    Object.keys(expandedState).forEach(key => delete expandedState[key])
-    if (fileCount.value === 1) {
-      const firstFile = Object.keys(files.value)[0]
-      if (firstFile) expandedState[firstFile] = true
+watch(
+  () => uiStore.modals.rawGist,
+  isOpen => {
+    if (isOpen) {
+      Object.keys(expandedState).forEach(key => delete expandedState[key])
+      if (fileCount.value === 1) {
+        const firstFile = Object.keys(files.value)[0]
+        if (firstFile) expandedState[firstFile] = true
+      }
     }
   }
-})
+)
 
 function handleClose() {
   uiStore.closeModal('rawGist')

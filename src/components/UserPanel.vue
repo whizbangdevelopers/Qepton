@@ -11,14 +11,6 @@
         {{ authStore.fullName }}
       </div>
 
-      <!-- Stats -->
-      <div class="row justify-center q-gutter-sm q-mb-md">
-        <q-chip dense size="sm" color="primary" text-color="white">
-          <q-icon name="mdi-code-braces" size="xs" class="q-mr-xs" />
-          {{ gistsStore.totalGists }} Gists
-        </q-chip>
-      </div>
-
       <!-- Last Sync Time -->
       <div v-if="gistsStore.lastSyncTime" class="text-caption text-grey-6 q-mb-md">
         Last sync: {{ formatLastSync }}

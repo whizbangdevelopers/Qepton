@@ -20,6 +20,11 @@ export interface SyncableSettings {
     tagsVisible: boolean
     tagsExpanded: boolean
   }
+  gistListView: 'list' | 'card'
+  gistSort: {
+    sortBy: 'updated' | 'name'
+    direction: 'asc' | 'desc'
+  }
   lastModified: number
 }
 
@@ -93,7 +98,7 @@ class SettingsSyncService {
 
     try {
       console.debug(`${TAG} Saving settings to GitHub`)
-      
+
       let fullSettings: Record<string, unknown> = settingsToSave
 
       if (this.settingsGistId) {
@@ -107,7 +112,7 @@ class SettingsSyncService {
         fullSettings,
         this.settingsGistId ?? undefined
       )
-      
+
       console.debug(`${TAG} Settings saved successfully`)
     } catch (error) {
       console.error(`${TAG} Failed to save settings:`, error)
@@ -145,6 +150,11 @@ class SettingsSyncService {
           languagesExpanded: true,
           tagsVisible: true,
           tagsExpanded: true
+        },
+        gistListView: 'list',
+        gistSort: {
+          sortBy: 'updated',
+          direction: 'desc'
         },
         lastModified: Date.now(),
         ...local

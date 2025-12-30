@@ -25,7 +25,7 @@ vi.mock('src/services/search', () => ({
 
 // Mock parser service
 vi.mock('src/services/parser', () => ({
-  extractLanguageTags: vi.fn((gist) => {
+  extractLanguageTags: vi.fn(gist => {
     const tags: string[] = []
     Object.values(gist.files || {}).forEach((file: { language?: string }) => {
       if (file.language) {
@@ -34,11 +34,11 @@ vi.mock('src/services/parser', () => ({
     })
     return [...new Set(tags)]
   }),
-  extractCustomTags: vi.fn((gist) => {
+  extractCustomTags: vi.fn(gist => {
     const match = gist.description?.match(/#(\w+)/g)
     return match ? match.map((t: string) => t.slice(1)) : []
   }),
-  parseDescription: vi.fn((desc) => ({
+  parseDescription: vi.fn(desc => ({
     title: null,
     description: desc || '',
     tags: []
@@ -110,7 +110,7 @@ describe('Gists Store', () => {
       const store = useGistsStore()
 
       store.gists = {
-        'old': {
+        old: {
           id: 'old',
           description: 'Old',
           updated_at: '2024-01-01T00:00:00Z',
@@ -120,7 +120,7 @@ describe('Gists Store', () => {
           files: {},
           owner: { login: 'test', id: 1, avatar_url: '' }
         },
-        'new': {
+        new: {
           id: 'new',
           description: 'New',
           updated_at: '2024-12-01T00:00:00Z',
@@ -141,7 +141,7 @@ describe('Gists Store', () => {
       const store = useGistsStore()
 
       store.gists = {
-        'gist1': {
+        gist1: {
           id: 'gist1',
           description: 'JS Gist',
           updated_at: '2024-01-01T00:00:00Z',
@@ -151,7 +151,7 @@ describe('Gists Store', () => {
           files: {},
           owner: { login: 'test', id: 1, avatar_url: '' }
         },
-        'gist2': {
+        gist2: {
           id: 'gist2',
           description: 'Python Gist',
           updated_at: '2024-01-02T00:00:00Z',
@@ -177,7 +177,7 @@ describe('Gists Store', () => {
       const store = useGistsStore()
 
       store.gists = {
-        'gist1': {
+        gist1: {
           id: 'gist1',
           description: 'Gist 1',
           updated_at: '2024-01-01T00:00:00Z',
@@ -187,7 +187,7 @@ describe('Gists Store', () => {
           files: {},
           owner: { login: 'test', id: 1, avatar_url: '' }
         },
-        'gist2': {
+        gist2: {
           id: 'gist2',
           description: 'Gist 2',
           updated_at: '2024-01-02T00:00:00Z',
@@ -207,8 +207,8 @@ describe('Gists Store', () => {
       const store = useGistsStore()
 
       store.gists = {
-        'gist1': {} as Gist,
-        'gist2': {} as Gist
+        gist1: {} as Gist,
+        gist2: {} as Gist
       }
 
       store.gistTags = {
@@ -330,7 +330,7 @@ describe('Gists Store', () => {
 
       store.gistTags = {
         'lang@JavaScript': new Set(['gist1', 'gist2']),
-        'custom': new Set(['gist1'])
+        custom: new Set(['gist1'])
       }
 
       store.removeGistFromTags('gist1')

@@ -7,14 +7,111 @@
           <div class="gist-list q-pa-md" data-test="gist-list">
             <!-- Header - Always visible -->
             <div class="gist-list-header q-mb-md">
-              <div class="row items-center">
-                <h5 class="text-h5 q-my-none q-mr-sm">
-                  {{ activeTagName }}
-                </h5>
-                <q-chip v-if="!gistsStore.isSyncing || hasGists" dense color="primary" text-color="white">
-                  {{ filteredGists.length }}
-                </q-chip>
-                <q-spinner v-else size="16px" color="primary" class="q-ml-xs" />
+              <div class="row items-center justify-between full-width">
+                <div class="row items-center">
+                  <h5 class="text-h5 q-my-none q-mr-sm">
+                    {{ activeTagName }}
+                  </h5>
+                  <!-- Sort Options -->
+                  <q-btn
+                    flat
+                    dense
+                    round
+                    size="sm"
+                    :icon="uiStore.gistSort.direction === 'asc' ? 'arrow_upward' : 'arrow_downward'"
+                    class="q-mr-xs"
+                    data-test="sort-btn"
+                  >
+                    <q-tooltip>Sort gists</q-tooltip>
+                    <q-menu anchor="bottom left" self="top left" data-test="sort-menu">
+                      <q-list dense style="min-width: 180px">
+                        <q-item-label header class="text-caption">Sort by</q-item-label>
+                        <q-item
+                          clickable
+                          v-close-popup
+                          :active="uiStore.gistSort.sortBy === 'updated'"
+                          @click="uiStore.setGistSort('updated')"
+                        >
+                          <q-item-section avatar>
+                            <q-icon name="schedule" size="sm" />
+                          </q-item-section>
+                          <q-item-section>Date Modified</q-item-section>
+                          <q-item-section side v-if="uiStore.gistSort.sortBy === 'updated'">
+                            <q-icon
+                              :name="
+                                uiStore.gistSort.direction === 'asc'
+                                  ? 'arrow_upward'
+                                  : 'arrow_downward'
+                              "
+                              size="xs"
+                            />
+                          </q-item-section>
+                        </q-item>
+                        <q-item
+                          clickable
+                          v-close-popup
+                          :active="uiStore.gistSort.sortBy === 'name'"
+                          @click="uiStore.setGistSort('name')"
+                        >
+                          <q-item-section avatar>
+                            <q-icon name="sort_by_alpha" size="sm" />
+                          </q-item-section>
+                          <q-item-section>Name</q-item-section>
+                          <q-item-section side v-if="uiStore.gistSort.sortBy === 'name'">
+                            <q-icon
+                              :name="
+                                uiStore.gistSort.direction === 'asc'
+                                  ? 'arrow_upward'
+                                  : 'arrow_downward'
+                              "
+                              size="xs"
+                            />
+                          </q-item-section>
+                        </q-item>
+                        <q-separator />
+                        <q-item clickable v-close-popup @click="uiStore.toggleSortDirection">
+                          <q-item-section avatar>
+                            <q-icon
+                              :name="
+                                uiStore.gistSort.direction === 'asc'
+                                  ? 'arrow_downward'
+                                  : 'arrow_upward'
+                              "
+                              size="sm"
+                            />
+                          </q-item-section>
+                          <q-item-section>{{
+                            uiStore.gistSort.direction === 'asc' ? 'Descending' : 'Ascending'
+                          }}</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-btn>
+                  <q-chip
+                    v-if="!gistsStore.isSyncing || hasGists"
+                    dense
+                    color="primary"
+                    text-color="white"
+                  >
+                    {{ filteredGists.length }}
+                  </q-chip>
+                  <q-spinner v-else size="16px" color="primary" class="q-ml-xs" />
+                </div>
+                <!-- View Toggle -->
+                <q-btn-toggle
+                  :model-value="uiStore.gistListView"
+                  @update:model-value="uiStore.setGistListView"
+                  dense
+                  flat
+                  toggle-color="primary"
+                  :options="[
+                    { icon: 'view_list', value: 'list' },
+                    { icon: 'grid_view', value: 'card' }
+                  ]"
+                  data-test="view-toggle"
+                >
+                  <q-tooltip>Toggle view</q-tooltip>
+                </q-btn-toggle>
               </div>
             </div>
 
@@ -30,12 +127,22 @@
                   clearable
                   class="col"
                   :error="searchStore.isRegexQuery && !searchStore.isValidRegex"
-                  :hint="searchStore.isRegexQuery ? (searchStore.isValidRegex ? 'Regex mode' : 'Invalid regex pattern') : ''"
+                  :hint="
+                    searchStore.isRegexQuery
+                      ? searchStore.isValidRegex
+                        ? 'Regex mode'
+                        : 'Invalid regex pattern'
+                      : ''
+                  "
                   hide-hint
                   data-test="global-search-input"
+                  @clear="searchQuery = ''"
                 >
                   <template #prepend>
-                    <q-icon :name="searchStore.isRegexQuery ? 'mdi-regex' : 'search'" :color="searchStore.isRegexQuery ? 'purple' : undefined" />
+                    <q-icon
+                      :name="searchStore.isRegexQuery ? 'mdi-regex' : 'search'"
+                      :color="searchStore.isRegexQuery ? 'purple' : undefined"
+                    />
                   </template>
                   <template #append>
                     <q-chip
@@ -48,7 +155,11 @@
                     >
                       regex
                     </q-chip>
-                    <q-badge v-if="searchQuery && filteredGists.length !== displayedGists.length" color="primary" class="q-mr-xs">
+                    <q-badge
+                      v-if="searchQuery && filteredGists.length !== displayedGists.length"
+                      color="primary"
+                      class="q-mr-xs"
+                    >
                       {{ filteredGists.length }} / {{ displayedGists.length }}
                     </q-badge>
                   </template>
@@ -79,9 +190,7 @@
                   <q-tooltip>Saved searches</q-tooltip>
                   <q-menu anchor="bottom right" self="top right" data-test="saved-searches-menu">
                     <q-list style="min-width: 250px; max-width: 350px">
-                      <q-item-label header class="text-weight-bold">
-                        Saved Searches
-                      </q-item-label>
+                      <q-item-label header class="text-weight-bold"> Saved Searches </q-item-label>
                       <q-separator />
                       <q-item
                         v-for="saved in searchStore.sortedSavedSearches"
@@ -153,7 +262,11 @@
                   no-caps
                   size="sm"
                   icon="mdi-code-tags"
-                  :label="searchStore.filters.languages.length > 0 ? `Languages (${searchStore.filters.languages.length})` : 'Languages'"
+                  :label="
+                    searchStore.filters.languages.length > 0
+                      ? `Languages (${searchStore.filters.languages.length})`
+                      : 'Languages'
+                  "
                   :color="searchStore.filters.languages.length > 0 ? 'primary' : 'grey-7'"
                   data-test="language-filter-btn"
                 >
@@ -249,7 +362,10 @@
             </div>
 
             <!-- Loading State -->
-            <div v-if="gistsStore.isSyncing && !isPullRefreshing && !hasGists" class="flex flex-center q-py-xl">
+            <div
+              v-if="gistsStore.isSyncing && !isPullRefreshing && !hasGists"
+              class="flex flex-center q-py-xl"
+            >
               <div class="text-center">
                 <q-spinner-gears size="60px" color="primary" />
                 <p class="text-subtitle1 q-mt-md text-grey-7">Syncing gists...</p>
@@ -277,9 +393,9 @@
               </div>
             </div>
 
-            <!-- Gist Cards with Virtual Scroll for Performance -->
+            <!-- List View -->
             <q-virtual-scroll
-              v-else
+              v-else-if="uiStore.isListView"
               :items="filteredGists"
               :virtual-scroll-item-size="88"
               class="gist-virtual-scroll"
@@ -335,6 +451,74 @@
                 </q-item-section>
               </q-item>
             </q-virtual-scroll>
+
+            <!-- Card View -->
+            <div v-else class="gist-card-grid">
+              <q-card
+                v-for="gist in filteredGists"
+                :key="gist.id"
+                flat
+                bordered
+                clickable
+                class="gist-card"
+                :class="{ 'gist-card--active': gistsStore.activeGistId === gist.id }"
+                @click="selectGist(gist.id)"
+                data-test="gist-card"
+              >
+                <q-card-section class="q-pb-xs">
+                  <div class="row items-start no-wrap">
+                    <div class="col">
+                      <div class="text-subtitle2 text-weight-bold ellipsis-2-lines">
+                        {{ getGistTitle(gist) }}
+                      </div>
+                    </div>
+                    <q-icon
+                      :name="gist.public ? 'public' : 'lock'"
+                      size="xs"
+                      :color="gist.public ? 'positive' : 'warning'"
+                      class="q-ml-sm"
+                    >
+                      <q-tooltip>{{ gist.public ? 'Public' : 'Secret' }}</q-tooltip>
+                    </q-icon>
+                  </div>
+                </q-card-section>
+
+                <q-card-section class="q-pt-none q-pb-sm">
+                  <div class="text-caption text-grey-7 ellipsis-2-lines">
+                    {{ getGistDescription(gist) }}
+                  </div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-section class="q-py-sm">
+                  <div class="row items-center q-gutter-xs">
+                    <q-chip
+                      v-for="file in Object.keys(gist.files || {}).slice(0, 2)"
+                      :key="file"
+                      dense
+                      size="sm"
+                      color="grey-3"
+                      text-color="grey-8"
+                    >
+                      {{ truncateFilename(file) }}
+                    </q-chip>
+                    <span
+                      v-if="Object.keys(gist.files || {}).length > 2"
+                      class="text-caption text-grey-6"
+                    >
+                      +{{ Object.keys(gist.files || {}).length - 2 }}
+                    </span>
+                  </div>
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  <div class="text-caption text-grey-5">
+                    {{ formatDate(gist.updated_at) }}
+                  </div>
+                </q-card-section>
+              </q-card>
+            </div>
           </div>
         </q-pull-to-refresh>
       </div>
@@ -365,6 +549,7 @@ import { useGistsStore } from 'src/stores/gists'
 import { useSettingsStore } from 'src/stores/settings'
 import { useAuthStore } from 'src/stores/auth'
 import { useSearchStore } from 'src/stores/search'
+import { useUIStore } from 'src/stores/ui'
 import GistPreviewPanel from 'src/components/GistPreviewPanel.vue'
 import { parseDescription } from 'src/services/parser'
 import { searchService } from 'src/services/search'
@@ -378,6 +563,7 @@ const gistsStore = useGistsStore()
 const settingsStore = useSettingsStore()
 const authStore = useAuthStore()
 const searchStore = useSearchStore()
+const uiStore = useUIStore()
 
 // Dynamic page title based on active tag
 useTagMeta()
@@ -407,16 +593,14 @@ function formatLangName(tag: string): string {
   return parseLangName(tag)
 }
 
-watch(searchQuery, (query) => {
+watch(searchQuery, query => {
   searchStore.setQuery(query)
 })
 
 const hasGists = computed(() => gistsStore.totalGists > 0)
 
 const activeTagName = computed(() => {
-  return gistsStore.activeTag === 'All Gists'
-    ? 'All Gists'
-    : gistsStore.activeTag
+  return gistsStore.activeTag === 'All Gists' ? 'All Gists' : gistsStore.activeTag
 })
 
 const displayedGists = computed(() => {
@@ -436,13 +620,13 @@ const filteredGists = computed(() => {
   const { visibility, languages, dateRange } = searchStore.filters
 
   if (visibility !== 'all') {
-    gists = gists.filter(g => visibility === 'public' ? g.public : !g.public)
+    gists = gists.filter(g => (visibility === 'public' ? g.public : !g.public))
   }
 
   if (languages.length > 0) {
     gists = gists.filter(g => {
       const gistLangs = Object.values(g.files || {})
-        .map(f => f.language ? `lang@${f.language.toLowerCase()}` : null)
+        .map(f => (f.language ? `lang@${f.language.toLowerCase()}` : null))
         .filter(Boolean)
       return languages.some(lang => gistLangs.includes(lang))
     })
@@ -462,6 +646,24 @@ const filteredGists = computed(() => {
     }
   }
 
+  // Apply sorting
+  const { sortBy, direction } = uiStore.gistSort
+  const multiplier = direction === 'asc' ? 1 : -1
+
+  gists = [...gists].sort((a, b) => {
+    switch (sortBy) {
+      case 'updated':
+        return multiplier * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime())
+      case 'name': {
+        const nameA = getGistTitle(a).toLowerCase()
+        const nameB = getGistTitle(b).toLowerCase()
+        return multiplier * nameA.localeCompare(nameB)
+      }
+      default:
+        return 0
+    }
+  })
+
   return gists
 })
 
@@ -473,6 +675,18 @@ function getGistTitle(gist: Gist): string {
 function getGistDescription(gist: Gist): string {
   const parsed = parseDescription(gist.description)
   return parsed.description || gist.description || 'No description'
+}
+
+function truncateFilename(filename: string, maxLength = 15): string {
+  if (filename.length <= maxLength) return filename
+  const ext = filename.lastIndexOf('.')
+  if (ext > 0 && filename.length - ext <= 5) {
+    const name = filename.substring(0, ext)
+    const extension = filename.substring(ext)
+    const truncatedName = name.substring(0, maxLength - extension.length - 2)
+    return `${truncatedName}..${extension}`
+  }
+  return filename.substring(0, maxLength - 2) + '..'
 }
 
 function formatDate(dateString: string): string {
@@ -506,10 +720,7 @@ async function selectGist(gistId: string) {
 
 async function handleSync() {
   try {
-    await Promise.all([
-      gistsStore.syncGists(),
-      gistsStore.syncStarredGists()
-    ])
+    await Promise.all([gistsStore.syncGists(), gistsStore.syncStarredGists()])
     $q.notify({
       type: 'positive',
       message: `Synced ${gistsStore.totalGists} gists`,
@@ -527,10 +738,7 @@ async function handleSync() {
 async function handlePullToRefresh(done: () => void) {
   isPullRefreshing.value = true
   try {
-    await Promise.all([
-      gistsStore.syncGists(),
-      gistsStore.syncStarredGists()
-    ])
+    await Promise.all([gistsStore.syncGists(), gistsStore.syncStarredGists()])
     $q.notify({
       type: 'positive',
       message: `Synced ${gistsStore.totalGists} gists`,
@@ -667,6 +875,39 @@ onUnmounted(() => {
   &.border-top {
     border-top: 1px solid var(--border-color);
   }
+}
+
+.gist-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.gist-card {
+  background: var(--bg-primary);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &--active {
+    border-color: var(--q-primary);
+    box-shadow: 0 0 0 2px var(--q-primary);
+  }
+}
+
+.ellipsis-2-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mobile-preview-card {

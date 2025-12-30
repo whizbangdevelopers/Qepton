@@ -45,7 +45,7 @@ test.describe('Content Rendering', () => {
       await expect(page.locator('[data-test="gist-item"]').first()).toBeVisible({ timeout: 15000 })
       await page.locator('[data-test="gist-item"]').first().click()
       await expect(page.locator('.q-dialog')).toBeVisible()
-      
+
       // CodeMirror editor should be visible
       await expect(page.locator('.cm-editor')).toBeVisible()
       // Should have syntax highlighting (cm-content contains highlighted code)
@@ -58,11 +58,11 @@ test.describe('Content Rendering', () => {
       await expect(page.locator('[data-test="gist-item"]').first()).toBeVisible({ timeout: 15000 })
       await page.locator('[data-test="gist-item"]').first().click()
       await expect(page.locator('.q-dialog')).toBeVisible()
-      
+
       // Check if any tab is a .md file - preview toggle should appear
       const tabs = page.locator('.q-tab')
       const tabCount = await tabs.count()
-      
+
       for (let i = 0; i < tabCount; i++) {
         const tabLabel = await tabs.nth(i).textContent()
         if (tabLabel?.match(/\.(md|markdown)$/i)) {

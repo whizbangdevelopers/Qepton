@@ -5,7 +5,14 @@
 
 import { defineStore } from 'pinia'
 import { settingsSync } from 'src/services/settings-sync'
-import type { UIState, ModalStates, UpdateInfo } from 'src/types/store'
+import type {
+  UIState,
+  ModalStates,
+  UpdateInfo,
+  GistListView,
+  GistSortOption,
+  GistSortDirection
+} from 'src/types/store'
 
 export const useUIStore = defineStore('ui', {
   state: (): UIState => ({
@@ -32,6 +39,11 @@ export const useUIStore = defineStore('ui', {
       languagesExpanded: true,
       tagsVisible: true,
       tagsExpanded: true
+    },
+    gistListView: 'list',
+    gistSort: {
+      sortBy: 'updated',
+      direction: 'desc'
     }
   }),
 
@@ -55,9 +67,21 @@ export const useUIStore = defineStore('ui', {
     /**
      * Check if a specific file is expanded
      */
-    isFileExpanded: (state) => (fileId: string): boolean => {
-      return state.expandedFiles[fileId] || false
-    }
+    isFileExpanded:
+      state =>
+      (fileId: string): boolean => {
+        return state.expandedFiles[fileId] || false
+      },
+
+    /**
+     * Check if list view is active
+     */
+    isListView: (state): boolean => state.gistListView === 'list',
+
+    /**
+     * Check if card view is active
+     */
+    isCardView: (state): boolean => state.gistListView === 'card'
   },
 
   actions: {
@@ -114,7 +138,10 @@ export const useUIStore = defineStore('ui', {
      */
     toggleImmersiveMode(): void {
       this.immersiveMode = !this.immersiveMode
-      settingsSync.saveSettings({ immersiveMode: this.immersiveMode, navDrawers: { ...this.navDrawers } })
+      settingsSync.saveSettings({
+        immersiveMode: this.immersiveMode,
+        navDrawers: { ...this.navDrawers }
+      })
       console.debug(`[UI] Immersive mode: ${this.immersiveMode}`)
     },
 
@@ -214,7 +241,10 @@ export const useUIStore = defineStore('ui', {
       } else {
         this.navDrawers.tagsVisible = !this.navDrawers.tagsVisible
       }
-      settingsSync.saveSettings({ immersiveMode: this.immersiveMode, navDrawers: { ...this.navDrawers } })
+      settingsSync.saveSettings({
+        immersiveMode: this.immersiveMode,
+        navDrawers: { ...this.navDrawers }
+      })
     },
 
     /**
@@ -226,12 +256,59 @@ export const useUIStore = defineStore('ui', {
       } else {
         this.navDrawers.tagsExpanded = !this.navDrawers.tagsExpanded
       }
-      settingsSync.saveSettings({ immersiveMode: this.immersiveMode, navDrawers: { ...this.navDrawers } })
+      settingsSync.saveSettings({
+        immersiveMode: this.immersiveMode,
+        navDrawers: { ...this.navDrawers }
+      })
+    },
+
+    /**
+     * Set gist list view mode
+     */
+    setGistListView(view: GistListView): void {
+      this.gistListView = view
+      settingsSync.saveSettings({ gistListView: view })
+      console.debug(`[UI] Gist list view: ${view}`)
+    },
+
+    /**
+     * Toggle gist list view between list and card
+     */
+    toggleGistListView(): void {
+      this.gistListView = this.gistListView === 'list' ? 'card' : 'list'
+      settingsSync.saveSettings({ gistListView: this.gistListView })
+      console.debug(`[UI] Toggled gist list view: ${this.gistListView}`)
+    },
+
+    /**
+     * Set gist sort option
+     */
+    setGistSort(sortBy: GistSortOption, direction?: GistSortDirection): void {
+      // If same sort option clicked, toggle direction
+      if (this.gistSort.sortBy === sortBy && direction === undefined) {
+        this.gistSort.direction = this.gistSort.direction === 'asc' ? 'desc' : 'asc'
+      } else {
+        this.gistSort.sortBy = sortBy
+        if (direction !== undefined) {
+          this.gistSort.direction = direction
+        }
+      }
+      settingsSync.saveSettings({ gistSort: { ...this.gistSort } })
+      console.debug(`[UI] Gist sort: ${this.gistSort.sortBy} ${this.gistSort.direction}`)
+    },
+
+    /**
+     * Toggle sort direction
+     */
+    toggleSortDirection(): void {
+      this.gistSort.direction = this.gistSort.direction === 'asc' ? 'desc' : 'asc'
+      settingsSync.saveSettings({ gistSort: { ...this.gistSort } })
+      console.debug(`[UI] Sort direction: ${this.gistSort.direction}`)
     }
   },
 
   // Persist UI preferences
   persist: {
-    paths: ['immersiveMode', 'expandedFiles', 'navDrawers']
+    paths: ['immersiveMode', 'expandedFiles', 'navDrawers', 'gistListView', 'gistSort']
   }
 })

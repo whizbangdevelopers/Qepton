@@ -1,9 +1,5 @@
 <template>
-  <q-dialog
-    :model-value="uiStore.modals.deleteGist"
-    @update:model-value="handleClose"
-    persistent
-  >
+  <q-dialog :model-value="uiStore.modals.deleteGist" @update:model-value="handleClose" persistent>
     <q-card style="min-width: 350px">
       <q-card-section class="row items-center">
         <q-avatar icon="warning" color="negative" text-color="white" />
@@ -19,12 +15,7 @@
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn
-          flat
-          label="Cancel"
-          @click="handleClose"
-          data-test="cancel-delete"
-        />
+        <q-btn flat label="Cancel" @click="handleClose" data-test="cancel-delete" />
         <q-btn
           color="negative"
           label="Delete"

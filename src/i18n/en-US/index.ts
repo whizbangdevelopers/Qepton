@@ -22,7 +22,7 @@ export default {
     loginWithOAuth: 'Login with GitHub',
     loginWithToken: 'Login with Token',
     tokenPlaceholder: 'GitHub Personal Access Token',
-    tokenHint: 'Paste your GitHub token with \'gist\' scope',
+    tokenHint: "Paste your GitHub token with 'gist' scope",
     tokenRequired: 'Token is required',
     invalidToken: 'Invalid GitHub token',
     generateToken: 'Generate a new token',

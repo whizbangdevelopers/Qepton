@@ -36,7 +36,9 @@ test.describe('Search Functionality', () => {
     await page.click('[data-test="search-button"]')
     await expect(page.locator('[data-test="search-dialog"]')).toBeVisible()
     await page.locator('[data-test="search-dialog"] input').fill('a')
-    await expect(page.locator('[data-test="search-dialog"]').getByText('Type at least 2 characters')).toBeVisible()
+    await expect(
+      page.locator('[data-test="search-dialog"]').getByText('Type at least 2 characters')
+    ).toBeVisible()
   })
 
   test('should search gists by description', async ({ page }) => {
@@ -44,7 +46,11 @@ test.describe('Search Functionality', () => {
     await expect(page.locator('[data-test="search-dialog"]')).toBeVisible()
     await page.locator('[data-test="search-dialog"] input').fill('test')
     // Wait for results or "No results" message
-    await expect(page.locator('[data-test="search-result-0"]').or(page.locator('[data-test="search-dialog"]').getByText('No results'))).toBeVisible({ timeout: 5000 })
+    await expect(
+      page
+        .locator('[data-test="search-result-0"]')
+        .or(page.locator('[data-test="search-dialog"]').getByText('No results'))
+    ).toBeVisible({ timeout: 5000 })
   })
 
   test('should navigate to gist from search results', async ({ page }) => {

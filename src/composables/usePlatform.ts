@@ -14,7 +14,7 @@ export function usePlatform() {
   const isCapacitor = ref(Platform.is.capacitor)
   const isPWA = ref(
     window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as Navigator & { standalone?: boolean }).standalone === true
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true
   )
   const isMobile = ref(Platform.is.mobile)
   const isDesktop = ref(Platform.is.desktop)

@@ -66,14 +66,7 @@
     <div v-if="pinnedTags.length > 0" class="nav-section q-mb-md">
       <div class="section-header q-px-md q-py-xs">
         <span class="text-caption text-weight-bold text-grey-7">PINNED</span>
-        <q-btn
-          flat
-          dense
-          round
-          size="xs"
-          icon="settings"
-          @click="uiStore.openModal('pinnedTags')"
-        >
+        <q-btn flat dense round size="xs" icon="settings" @click="uiStore.openModal('pinnedTags')">
           <q-tooltip>Manage Pinned Tags</q-tooltip>
         </q-btn>
       </div>
@@ -130,21 +123,9 @@
           <span class="text-caption text-weight-bold">LANGUAGES</span>
         </q-item-section>
         <q-item-section side>
-          <div class="row items-center no-wrap">
-            <q-badge color="primary" text-color="white" class="q-mr-xs">
-              {{ languageTags.length }}
-            </q-badge>
-            <q-btn
-              flat
-              dense
-              round
-              size="xs"
-              icon="visibility_off"
-              @click.stop="uiStore.toggleNavDrawerVisibility('languages')"
-            >
-              <q-tooltip>Hide Languages</q-tooltip>
-            </q-btn>
-          </div>
+          <q-badge color="primary" text-color="white">
+            {{ languageTags.length }}
+          </q-badge>
         </q-item-section>
       </template>
 
@@ -191,23 +172,7 @@
       </q-scroll-area>
     </q-expansion-item>
 
-    <!-- Show Languages button when hidden -->
-    <q-item
-      v-else
-      clickable
-      dense
-      @click="uiStore.toggleNavDrawerVisibility('languages')"
-      class="hidden-drawer-item"
-    >
-      <q-item-section avatar>
-        <q-icon name="mdi-code-tags" size="sm" color="grey-6" />
-      </q-item-section>
-      <q-item-section>
-        <span class="text-caption text-grey-6">Show Languages ({{ languageTags.length }})</span>
-      </q-item-section>
-    </q-item>
-
-    <q-separator class="q-my-sm" />
+    <q-separator v-if="uiStore.navDrawers.languagesVisible" class="q-my-sm" />
 
     <!-- Custom Tags Drawer -->
     <q-expansion-item
@@ -224,21 +189,9 @@
           <span class="text-caption text-weight-bold">TAGS</span>
         </q-item-section>
         <q-item-section side>
-          <div class="row items-center no-wrap">
-            <q-badge color="primary" text-color="white" class="q-mr-xs">
-              {{ customTags.length }}
-            </q-badge>
-            <q-btn
-              flat
-              dense
-              round
-              size="xs"
-              icon="visibility_off"
-              @click.stop="uiStore.toggleNavDrawerVisibility('tags')"
-            >
-              <q-tooltip>Hide Tags</q-tooltip>
-            </q-btn>
-          </div>
+          <q-badge color="primary" text-color="white">
+            {{ customTags.length }}
+          </q-badge>
         </q-item-section>
       </template>
 
@@ -256,9 +209,7 @@
               <q-icon name="mdi-tag" size="xs" />
             </q-item-section>
             <q-item-section>
-              <q-item-label class="text-caption">
-                #{{ tag }}
-              </q-item-label>
+              <q-item-label class="text-caption"> #{{ tag }} </q-item-label>
             </q-item-section>
             <q-item-section side>
               <div class="row items-center">
@@ -284,33 +235,13 @@
           <!-- Empty state -->
           <q-item v-if="customTags.length === 0">
             <q-item-section class="text-center text-grey-6">
-              <q-item-label caption>
-                No custom tags yet
-              </q-item-label>
-              <q-item-label caption class="q-mt-xs">
-                Add #tags to gist descriptions
-              </q-item-label>
+              <q-item-label caption> No custom tags yet </q-item-label>
+              <q-item-label caption class="q-mt-xs"> Add #tags to gist descriptions </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
     </q-expansion-item>
-
-    <!-- Show Tags button when hidden -->
-    <q-item
-      v-else
-      clickable
-      dense
-      @click="uiStore.toggleNavDrawerVisibility('tags')"
-      class="hidden-drawer-item"
-    >
-      <q-item-section avatar>
-        <q-icon name="mdi-tag" size="sm" color="grey-6" />
-      </q-item-section>
-      <q-item-section>
-        <span class="text-caption text-grey-6">Show Tags ({{ customTags.length }})</span>
-      </q-item-section>
-    </q-item>
   </div>
 </template>
 
@@ -459,15 +390,6 @@ function handleDragEnd() {
 
   &.drag-over {
     border-top: 2px solid var(--q-primary);
-    background: var(--bg-secondary);
-  }
-}
-
-.hidden-drawer-item {
-  opacity: 0.7;
-  
-  &:hover {
-    opacity: 1;
     background: var(--bg-secondary);
   }
 }

@@ -56,9 +56,7 @@
 
       <q-card-section class="text-center text-caption text-grey-7">
         <p>Need help?</p>
-        <p>
-          Token must have <strong>gist</strong> scope to read and write gists
-        </p>
+        <p>Token must have <strong>gist</strong> scope to read and write gists</p>
       </q-card-section>
     </q-card>
   </q-page>
@@ -105,10 +103,7 @@ async function loginWithToken() {
     })
 
     // Sync gists and starred gists in background
-    Promise.all([
-      gistsStore.syncGists(),
-      gistsStore.syncStarredGists()
-    ]).catch(err => {
+    Promise.all([gistsStore.syncGists(), gistsStore.syncStarredGists()]).catch(err => {
       console.error('Background sync failed:', err)
     })
 

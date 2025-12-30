@@ -24,7 +24,10 @@
                 :color="activeGist.public ? 'positive' : 'warning'"
                 size="sm"
               />
-              <span :class="activeGist.public ? 'text-positive' : 'text-warning'" class="text-caption">
+              <span
+                :class="activeGist.public ? 'text-positive' : 'text-warning'"
+                class="text-caption"
+              >
                 {{ activeGist.public ? 'Public' : 'Secret' }}
               </span>
               <q-chip dense size="sm" color="grey-8" text-color="white">
@@ -42,7 +45,15 @@
             <q-btn flat dense round icon="edit" @click="handleEdit" data-test="edit-gist-btn">
               <q-tooltip>Edit (Cmd/Ctrl+E)</q-tooltip>
             </q-btn>
-            <q-btn flat dense round icon="delete" color="negative" @click="handleDelete" data-test="delete-gist-btn">
+            <q-btn
+              flat
+              dense
+              round
+              icon="delete"
+              color="negative"
+              @click="handleDelete"
+              data-test="delete-gist-btn"
+            >
               <q-tooltip>Delete</q-tooltip>
             </q-btn>
           </div>
@@ -95,14 +106,10 @@
 
       <!-- File List -->
       <div v-else class="file-list q-px-md q-pb-md">
-        <div
-          v-for="(file, filename) in activeGist.files"
-          :key="filename"
-          class="file-item-wrapper"
-        >
+        <div v-for="(file, filename) in activeGist.files" :key="filename" class="file-item-wrapper">
           <q-expansion-item
             v-model="expandedFiles[String(filename)]"
-            :group="fileCount === 1 ? undefined : 'gist-files'"
+            :group="useGroup && fileCount > 1 ? 'gist-files' : undefined"
             :default-opened="fileCount === 1"
             class="file-item"
             header-class="file-header"
@@ -115,13 +122,7 @@
               <q-item-section>
                 <q-item-label class="file-name">{{ filename }}</q-item-label>
                 <q-item-label caption>
-                  <q-chip
-                    v-if="file.language"
-                    dense
-                    size="sm"
-                    color="grey-8"
-                    text-color="grey-3"
-                  >
+                  <q-chip v-if="file.language" dense size="sm" color="grey-8" text-color="grey-3">
                     {{ file.language }}
                   </q-chip>
                   <span class="text-grey-6 q-ml-sm">{{ formatFileSize(file.size) }}</span>
@@ -129,11 +130,25 @@
               </q-item-section>
               <q-item-section side>
                 <q-btn
+                  v-if="canFormat(String(filename), file.language)"
                   flat
+                  dense
+                  round
+                  icon="auto_fix_high"
+                  size="sm"
+                  :loading="formattingFile === String(filename)"
+                  @click.stop="handleFormatFile(String(filename), file.content, file.language)"
+                  data-test="format-code-button"
+                >
+                  <q-tooltip>Format & Copy</q-tooltip>
+                </q-btn>
+                <q-btn
+                  unelevated
                   dense
                   round
                   icon="content_copy"
                   size="sm"
+                  color="primary"
                   @click.stop="copyFileContent(file.content)"
                   data-test="copy-code-button"
                 >
@@ -199,6 +214,7 @@ import CodeEditor from 'src/components/CodeEditor.vue'
 import { parseDescription } from 'src/services/parser'
 import { renderMarkdown } from 'src/services/markdown'
 import { renderNotebook, isJupyterNotebook, isJupyterFile } from 'src/services/jupyter'
+import { formatCode, canFormat } from 'src/services/formatter'
 
 const $q = useQuasar()
 const gistsStore = useGistsStore()
@@ -206,10 +222,14 @@ const uiStore = useUIStore()
 
 const displayMode = ref<'formatted' | 'raw'>('formatted')
 const expandedFiles = reactive<Record<string, boolean>>({})
+const useGroup = ref(true) // Controls accordion group behavior
+const formattingFile = ref<string | null>(null) // Track which file is being formatted
 
 const activeGist = computed(() => gistsStore.activeGist)
 const isLoading = computed(() => activeGist.value && gistsStore.isGistLoading(activeGist.value.id))
-const fileCount = computed(() => activeGist.value ? Object.keys(activeGist.value.files).length : 0)
+const fileCount = computed(() =>
+  activeGist.value ? Object.keys(activeGist.value.files).length : 0
+)
 
 const gistTitle = computed(() => {
   if (!activeGist.value) return ''
@@ -226,8 +246,9 @@ const gistDescription = computed(() => {
 // Watch for gist changes to reset state
 watch(activeGist, (newGist, oldGist) => {
   if (newGist?.id !== oldGist?.id) {
-    // Reset expanded files
+    // Reset expanded files and group behavior
     Object.keys(expandedFiles).forEach(key => delete expandedFiles[key])
+    useGroup.value = true
     if (newGist?.files) {
       const fileCount = Object.keys(newGist.files).length
       if (fileCount === 1) {
@@ -304,6 +325,8 @@ function countRemainingLines(content: string | undefined): number {
 
 function expandAllFiles() {
   if (activeGist.value?.files) {
+    // Disable group behavior to allow multiple items to be open
+    useGroup.value = false
     Object.keys(activeGist.value.files).forEach(filename => {
       expandedFiles[filename] = true
     })
@@ -312,6 +335,8 @@ function expandAllFiles() {
 
 function collapseAllFiles() {
   if (activeGist.value?.files) {
+    // Re-enable group behavior and collapse all
+    useGroup.value = true
     Object.keys(activeGist.value.files).forEach(filename => {
       expandedFiles[filename] = false
     })
@@ -319,21 +344,114 @@ function collapseAllFiles() {
 }
 
 async function copyFileContent(content: string | undefined) {
-  if (!content) return
+  if (!content) {
+    $q.notify({
+      type: 'warning',
+      message: 'No content to copy - gist may still be loading',
+      icon: 'warning',
+      timeout: 2000
+    })
+    return
+  }
   try {
-    await navigator.clipboard.writeText(content)
+    // Try modern clipboard API first
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(content)
+    } else {
+      // Fallback for non-secure contexts or older browsers
+      const textArea = document.createElement('textarea')
+      textArea.value = content
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      document.execCommand('copy')
+      textArea.remove()
+    }
     $q.notify({
       type: 'positive',
       message: 'Copied to clipboard',
       icon: 'check_circle',
       timeout: 1500
     })
-  } catch {
+  } catch (error) {
+    console.error('Copy failed:', error)
     $q.notify({
       type: 'negative',
-      message: 'Failed to copy',
+      message: 'Failed to copy to clipboard',
       icon: 'error'
     })
+  }
+}
+
+async function handleFormatFile(filename: string, content: string | undefined, language?: string) {
+  if (!content || !activeGist.value) {
+    $q.notify({
+      type: 'warning',
+      message: 'No content to format',
+      icon: 'warning',
+      timeout: 2000
+    })
+    return
+  }
+
+  if (!canFormat(filename, language)) {
+    $q.notify({
+      type: 'info',
+      message: 'This file type cannot be formatted',
+      icon: 'info',
+      timeout: 2000
+    })
+    return
+  }
+
+  formattingFile.value = filename
+
+  try {
+    const result = await formatCode(content, filename, language)
+
+    if (result.success && result.formatted) {
+      // Copy formatted code to clipboard
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(result.formatted)
+      } else {
+        const textArea = document.createElement('textarea')
+        textArea.value = result.formatted
+        textArea.style.position = 'fixed'
+        textArea.style.left = '-999999px'
+        textArea.style.top = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        document.execCommand('copy')
+        textArea.remove()
+      }
+
+      $q.notify({
+        type: 'positive',
+        message: 'Formatted code copied to clipboard',
+        icon: 'check_circle',
+        timeout: 2000
+      })
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: result.error || 'Failed to format code',
+        icon: 'error',
+        timeout: 3000
+      })
+    }
+  } catch (error) {
+    console.error('Format error:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to format code',
+      icon: 'error'
+    })
+  } finally {
+    formattingFile.value = null
   }
 }
 
@@ -491,19 +609,43 @@ function handleDelete() {
   border: 1px solid var(--border-color);
   border-radius: 4px;
 
-  :deep(h1), :deep(h2), :deep(h3), :deep(h4), :deep(h5), :deep(h6) {
+  :deep(h1),
+  :deep(h2),
+  :deep(h3),
+  :deep(h4),
+  :deep(h5),
+  :deep(h6) {
     margin-top: 1em;
     margin-bottom: 0.5em;
     font-weight: 600;
   }
 
-  :deep(h1) { font-size: 2em; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
-  :deep(h2) { font-size: 1.5em; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
-  :deep(h3) { font-size: 1.25em; }
+  :deep(h1) {
+    font-size: 2em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3em;
+  }
+  :deep(h2) {
+    font-size: 1.5em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3em;
+  }
+  :deep(h3) {
+    font-size: 1.25em;
+  }
 
-  :deep(p) { margin: 1em 0; line-height: 1.6; }
+  :deep(p) {
+    margin: 1em 0;
+    line-height: 1.6;
+  }
 
-  :deep(a) { color: var(--q-primary); text-decoration: none; &:hover { text-decoration: underline; } }
+  :deep(a) {
+    color: var(--q-primary);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
   :deep(code) {
     background: var(--bg-secondary);
@@ -525,8 +667,14 @@ function handleDelete() {
     }
   }
 
-  :deep(ul), :deep(ol) { padding-left: 2em; margin: 1em 0; }
-  :deep(li) { margin: 0.25em 0; }
+  :deep(ul),
+  :deep(ol) {
+    padding-left: 2em;
+    margin: 1em 0;
+  }
+  :deep(li) {
+    margin: 0.25em 0;
+  }
 
   :deep(blockquote) {
     border-left: 4px solid var(--q-primary);
@@ -540,18 +688,29 @@ function handleDelete() {
     width: 100%;
     margin: 1em 0;
 
-    th, td {
+    th,
+    td {
       border: 1px solid var(--border-color);
       padding: 8px 12px;
       text-align: left;
     }
 
-    th { background: var(--bg-secondary); font-weight: 600; }
+    th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+    }
   }
 
-  :deep(img) { max-width: 100%; height: auto; }
+  :deep(img) {
+    max-width: 100%;
+    height: auto;
+  }
 
-  :deep(hr) { border: none; border-top: 1px solid var(--border-color); margin: 2em 0; }
+  :deep(hr) {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2em 0;
+  }
 }
 
 .jupyter-preview {
@@ -573,7 +732,8 @@ function handleDelete() {
     overflow: hidden;
   }
 
-  :deep(.nb-input), :deep(.nb-output) {
+  :deep(.nb-input),
+  :deep(.nb-output) {
     padding: 12px;
   }
 
@@ -586,7 +746,8 @@ function handleDelete() {
     background: var(--bg-primary);
   }
 
-  :deep(.nb-stdout), :deep(.nb-stderr) {
+  :deep(.nb-stdout),
+  :deep(.nb-stderr) {
     font-family: 'Fira Code', monospace;
     font-size: 13px;
     white-space: pre-wrap;
@@ -615,13 +776,24 @@ function handleDelete() {
   :deep(.nb-markdown) {
     padding: 12px 16px;
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin-top: 0.5em;
       margin-bottom: 0.5em;
     }
 
-    p { margin: 0.5em 0; line-height: 1.6; }
-    ul, ol { padding-left: 1.5em; }
+    p {
+      margin: 0.5em 0;
+      line-height: 1.6;
+    }
+    ul,
+    ol {
+      padding-left: 1.5em;
+    }
   }
 
   :deep(.nb-output img) {
@@ -633,7 +805,8 @@ function handleDelete() {
     border-collapse: collapse;
     margin: 8px 0;
 
-    th, td {
+    th,
+    td {
       border: 1px solid var(--border-color);
       padding: 6px 10px;
     }

@@ -12,19 +12,144 @@
       </q-card-section>
 
       <q-tabs v-model="activeTab" dense align="left" class="q-mt-sm">
-        <q-tab name="languages" label="Languages" icon="code" />
+        <q-tab name="display" label="Display" icon="dashboard" />
         <q-tab name="editor" label="Editor" icon="edit" />
+        <q-tab name="languages" label="Languages" icon="code" />
       </q-tabs>
 
       <q-separator />
 
       <q-tab-panels v-model="activeTab" animated>
+        <q-tab-panel name="display" class="q-pa-md">
+          <div class="text-subtitle2 q-mb-md">Gist List</div>
+
+          <q-list>
+            <q-item tag="label">
+              <q-item-section>
+                <q-item-label>Default View</q-item-label>
+                <q-item-label caption>Choose between list or card view</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn-toggle
+                  :model-value="uiStore.gistListView"
+                  @update:model-value="uiStore.setGistListView"
+                  dense
+                  :options="[
+                    { icon: 'view_list', value: 'list' },
+                    { icon: 'grid_view', value: 'card' }
+                  ]"
+                />
+              </q-item-section>
+            </q-item>
+
+            <q-item tag="label">
+              <q-item-section>
+                <q-item-label>Default Sort</q-item-label>
+                <q-item-label caption>How gists are sorted by default</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn-toggle
+                  :model-value="uiStore.gistSort.sortBy"
+                  @update:model-value="val => uiStore.setGistSort(val, uiStore.gistSort.direction)"
+                  dense
+                  :options="[
+                    { label: 'Date', value: 'updated' },
+                    { label: 'Name', value: 'name' }
+                  ]"
+                />
+              </q-item-section>
+            </q-item>
+
+            <q-item tag="label">
+              <q-item-section>
+                <q-item-label>Sort Direction</q-item-label>
+                <q-item-label caption>Ascending or descending order</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn-toggle
+                  :model-value="uiStore.gistSort.direction"
+                  @update:model-value="val => uiStore.setGistSort(uiStore.gistSort.sortBy, val)"
+                  dense
+                  :options="[
+                    { icon: 'arrow_upward', value: 'asc' },
+                    { icon: 'arrow_downward', value: 'desc' }
+                  ]"
+                />
+              </q-item-section>
+            </q-item>
+          </q-list>
+
+          <q-separator class="q-my-md" />
+
+          <div class="text-subtitle2 q-mb-md">Navigation Drawers</div>
+
+          <q-list>
+            <q-item tag="label">
+              <q-item-section>
+                <q-item-label>Languages Section</q-item-label>
+                <q-item-label caption>Show languages in navigation</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle
+                  :model-value="uiStore.navDrawers.languagesVisible"
+                  @update:model-value="uiStore.toggleNavDrawerVisibility('languages')"
+                  color="primary"
+                />
+              </q-item-section>
+            </q-item>
+
+            <q-item v-if="uiStore.navDrawers.languagesVisible" tag="label">
+              <q-item-section>
+                <q-item-label class="q-pl-md">Expanded by Default</q-item-label>
+                <q-item-label caption class="q-pl-md">Auto-expand languages section</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle
+                  :model-value="uiStore.navDrawers.languagesExpanded"
+                  @update:model-value="uiStore.toggleNavDrawerExpanded('languages')"
+                  color="primary"
+                />
+              </q-item-section>
+            </q-item>
+
+            <q-item tag="label">
+              <q-item-section>
+                <q-item-label>Tags Section</q-item-label>
+                <q-item-label caption>Show custom tags in navigation</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle
+                  :model-value="uiStore.navDrawers.tagsVisible"
+                  @update:model-value="uiStore.toggleNavDrawerVisibility('tags')"
+                  color="primary"
+                />
+              </q-item-section>
+            </q-item>
+
+            <q-item v-if="uiStore.navDrawers.tagsVisible" tag="label">
+              <q-item-section>
+                <q-item-label class="q-pl-md">Expanded by Default</q-item-label>
+                <q-item-label caption class="q-pl-md">Auto-expand tags section</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle
+                  :model-value="uiStore.navDrawers.tagsExpanded"
+                  @update:model-value="uiStore.toggleNavDrawerExpanded('tags')"
+                  color="primary"
+                />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-tab-panel>
+
         <q-tab-panel name="languages" class="q-pa-md">
-          <div class="text-subtitle2 q-mb-sm">Supported Languages ({{ supportedLanguages.length }})</div>
+          <div class="text-subtitle2 q-mb-sm">
+            Supported Languages ({{ supportedLanguages.length }})
+          </div>
           <div class="text-caption text-grey q-mb-md">
             Syntax highlighting is available for these file types
           </div>
-          
+
           <q-list dense bordered separator class="rounded-borders">
             <q-item v-for="lang in supportedLanguages" :key="lang.id">
               <q-item-section avatar>
@@ -39,11 +164,13 @@
             </q-item>
           </q-list>
 
-          <div class="text-subtitle2 q-mt-lg q-mb-sm">Not Yet Supported ({{ unsupportedLanguages.length }})</div>
+          <div class="text-subtitle2 q-mt-lg q-mb-sm">
+            Not Yet Supported ({{ unsupportedLanguages.length }})
+          </div>
           <div class="text-caption text-grey q-mb-md">
             These languages can be added in future updates
           </div>
-          
+
           <q-list dense bordered separator class="rounded-borders">
             <q-item v-for="lang in unsupportedLanguages" :key="lang.id">
               <q-item-section avatar>
@@ -61,7 +188,7 @@
 
         <q-tab-panel name="editor" class="q-pa-md">
           <div class="text-subtitle2 q-mb-md">Editor Preferences</div>
-          
+
           <q-list>
             <q-item tag="label">
               <q-item-section>
@@ -141,7 +268,7 @@ import { SUPPORTED_LANGUAGES, UNSUPPORTED_LANGUAGES } from 'src/services/languag
 
 const uiStore = useUIStore()
 
-const activeTab = ref('languages')
+const activeTab = ref('display')
 const lineWrapping = ref(true)
 const tabSize = ref(2)
 const fontSize = ref(14)

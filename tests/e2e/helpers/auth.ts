@@ -59,16 +59,19 @@ export async function loginWithMock(page: Page): Promise<void> {
   // Set mock auth state in localStorage before navigating
   // Uses 'auth' key for Pinia persisted state
   await page.addInitScript(() => {
-    localStorage.setItem('auth', JSON.stringify({
-      accessToken: 'mock_token_for_testing',
-      user: {
-        login: 'octocat',
-        id: 583231,
-        avatar_url: 'https://avatars.githubusercontent.com/u/583231?v=4',
-        name: 'The Octocat'
-      },
-      isAuthenticated: true
-    }))
+    localStorage.setItem(
+      'auth',
+      JSON.stringify({
+        accessToken: 'mock_token_for_testing',
+        user: {
+          login: 'octocat',
+          id: 583231,
+          avatar_url: 'https://avatars.githubusercontent.com/u/583231?v=4',
+          name: 'The Octocat'
+        },
+        isAuthenticated: true
+      })
+    )
     localStorage.setItem('github-token', 'mock_token_for_testing')
   })
 

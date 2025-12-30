@@ -27,7 +27,7 @@ export function generateCodeFile(): TestFile {
     { ext: 'py', lang: 'Python', generator: () => generatePython() },
     { ext: 'md', lang: 'Markdown', generator: () => generateMarkdown() },
     { ext: 'json', lang: 'JSON', generator: () => generateJSON() },
-    { ext: 'sh', lang: 'Shell', generator: () => generateShell() },
+    { ext: 'sh', lang: 'Shell', generator: () => generateShell() }
   ]
 
   const lang = faker.helpers.arrayElement(languages)
@@ -36,7 +36,7 @@ export function generateCodeFile(): TestFile {
   return {
     filename,
     content: lang.generator(),
-    language: lang.lang,
+    language: lang.lang
   }
 }
 
@@ -151,13 +151,13 @@ export function generateJSON(): string {
     address: {
       street: faker.location.streetAddress(),
       city: faker.location.city(),
-      country: faker.location.country(),
+      country: faker.location.country()
     },
     settings: {
       theme: faker.helpers.arrayElement(['dark', 'light', 'auto']),
       notifications: faker.datatype.boolean(),
-      language: faker.helpers.arrayElement(['en', 'es', 'fr', 'de']),
-    },
+      language: faker.helpers.arrayElement(['en', 'es', 'fr', 'de'])
+    }
   }
 
   return JSON.stringify(data, null, 2)
@@ -208,13 +208,13 @@ export function generateTestGist(options?: {
   // Generate description with optional tags
   let description = faker.lorem.sentence()
   if (tags.length > 0) {
-    description += ' ' + tags.map((t) => `#${t}`).join(' ')
+    description += ' ' + tags.map(t => `#${t}`).join(' ')
   } else if (faker.datatype.boolean()) {
     // Randomly add some tags
     const randomTags = faker.helpers.multiple(() => faker.word.noun().toLowerCase(), {
-      count: faker.number.int({ min: 1, max: 3 }),
+      count: faker.number.int({ min: 1, max: 3 })
     })
-    description += ' ' + randomTags.map((t) => `#${t}`).join(' ')
+    description += ' ' + randomTags.map(t => `#${t}`).join(' ')
   }
 
   // Generate files
@@ -227,7 +227,7 @@ export function generateTestGist(options?: {
   return {
     description,
     files,
-    public: isPublic,
+    public: isPublic
   }
 }
 

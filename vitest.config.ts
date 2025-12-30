@@ -14,11 +14,7 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: './coverage',
       include: ['src/**/*.ts', 'src/**/*.vue'],
-      exclude: [
-        'src/**/*.d.ts',
-        'src/types/**/*',
-        'src/boot/**/*'
-      ]
+      exclude: ['src/**/*.d.ts', 'src/types/**/*', 'src/boot/**/*']
     },
     deps: {
       inline: ['quasar']

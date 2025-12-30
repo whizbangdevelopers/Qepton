@@ -18,5 +18,7 @@ declare module 'markdown-it-katex' {
 
 declare module 'twitter-text' {
   export function extractHashtags(text: string): string[]
-  export function extractHashtagsWithIndices(text: string): Array<{ hashtag: string; indices: [number, number] }>
+  export function extractHashtagsWithIndices(
+    text: string
+  ): Array<{ hashtag: string; indices: [number, number] }>
 }

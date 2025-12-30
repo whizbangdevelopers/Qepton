@@ -12,25 +12,19 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
-    children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/IndexPage.vue') }]
   },
 
   {
     path: '/login',
     component: () => import('layouts/AuthLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/LoginPage.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/LoginPage.vue') }]
   },
 
   {
     path: '/editor-demo',
     component: () => import('layouts/AuthLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/EditorDemoPage.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/EditorDemoPage.vue') }]
   },
 
   // Always leave this as last one,

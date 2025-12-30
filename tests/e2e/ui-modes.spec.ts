@@ -75,7 +75,9 @@ test.describe('UI Modes', () => {
     test('should display app info', async ({ page }) => {
       await page.click('[data-test="about-button"]')
       await expect(page.locator('[data-test="about-dialog"]')).toBeVisible()
-      await expect(page.locator('[data-test="about-dialog"]').getByText('About Qepton')).toBeVisible()
+      await expect(
+        page.locator('[data-test="about-dialog"]').getByText('About Qepton')
+      ).toBeVisible()
       await expect(page.locator('[data-test="about-dialog"]').getByText('Version')).toBeVisible()
     })
 
@@ -100,8 +102,12 @@ test.describe('UI Modes', () => {
     test('should display Languages and Editor tabs', async ({ page }) => {
       await page.click('[data-test="settings-button"]')
       await expect(page.locator('[data-test="settings-dialog"]')).toBeVisible()
-      await expect(page.locator('[data-test="settings-dialog"]').getByRole('tab', { name: 'Languages' })).toBeVisible()
-      await expect(page.locator('[data-test="settings-dialog"]').getByRole('tab', { name: 'Editor' })).toBeVisible()
+      await expect(
+        page.locator('[data-test="settings-dialog"]').getByRole('tab', { name: 'Languages' })
+      ).toBeVisible()
+      await expect(
+        page.locator('[data-test="settings-dialog"]').getByRole('tab', { name: 'Editor' })
+      ).toBeVisible()
     })
 
     test('should show supported languages list', async ({ page }) => {

@@ -46,7 +46,7 @@ export default defineConfig({
 
     /* Global timeout for each action */
     actionTimeout: 30000,
-    navigationTimeout: 30000,
+    navigationTimeout: 30000
   },
 
   /* Configure projects for major browsers */
@@ -59,29 +59,31 @@ export default defineConfig({
         // otherwise use Playwright's bundled browser (works in Docker containers)
         launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
           ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
-          : {},
-      },
+          : {}
+      }
     },
 
     // Only run these browsers in full local testing (not in Docker CI)
-    ...(process.env.FULL_BROWSER_TEST ? [
-      {
-        name: 'firefox',
-        use: { ...devices['Desktop Firefox'] },
-      },
-      {
-        name: 'webkit',
-        use: { ...devices['Desktop Safari'] },
-      },
-      {
-        name: 'Mobile Chrome',
-        use: { ...devices['Pixel 5'] },
-      },
-      {
-        name: 'Mobile Safari',
-        use: { ...devices['iPhone 12'] },
-      },
-    ] : []),
+    ...(process.env.FULL_BROWSER_TEST
+      ? [
+          {
+            name: 'firefox',
+            use: { ...devices['Desktop Firefox'] }
+          },
+          {
+            name: 'webkit',
+            use: { ...devices['Desktop Safari'] }
+          },
+          {
+            name: 'Mobile Chrome',
+            use: { ...devices['Pixel 5'] }
+          },
+          {
+            name: 'Mobile Safari',
+            use: { ...devices['iPhone 12'] }
+          }
+        ]
+      : [])
   ],
 
   /* Web server configuration - starts quasar dev automatically */
@@ -89,6 +91,6 @@ export default defineConfig({
     command: 'npx quasar dev',
     url: 'http://localhost:9000',
     reuseExistingServer: true,
-    timeout: 120000,
-  },
+    timeout: 120000
+  }
 })

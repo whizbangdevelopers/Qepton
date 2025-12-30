@@ -63,8 +63,8 @@
             </span>
             <q-icon name="help_outline" size="xs" color="grey" class="cursor-pointer">
               <q-tooltip max-width="300px">
-                GitHub does not allow changing gist visibility after creation.
-                To change visibility: copy content, create a new gist with desired visibility, then delete this one.
+                GitHub does not allow changing gist visibility after creation. To change visibility:
+                copy content, create a new gist with desired visibility, then delete this one.
               </q-tooltip>
             </q-icon>
             <q-space />
@@ -93,11 +93,27 @@
                   label="Filename"
                   outlined
                   dense
-                  :rules="[val => !!val || 'Filename is required', val => isValidFilename(val) || 'Invalid filename']"
+                  :rules="[
+                    val => !!val || 'Filename is required',
+                    val => isValidFilename(val) || 'Invalid filename'
+                  ]"
                   data-test="file-name"
                 />
               </div>
               <div class="col-auto">
+                <q-btn
+                  v-if="canFormat(file.filename)"
+                  flat
+                  round
+                  dense
+                  icon="auto_fix_high"
+                  color="primary"
+                  :loading="formattingIndex === index"
+                  @click="handleFormatFile(index)"
+                  data-test="format-file"
+                >
+                  <q-tooltip>Format code</q-tooltip>
+                </q-btn>
                 <q-btn
                   v-if="files.length > 1 || file.isNew"
                   flat
@@ -114,11 +130,7 @@
             </div>
 
             <div class="q-mt-sm" data-test="file-content">
-              <CodeEditor
-                v-model="file.content"
-                :filename="file.filename"
-                height="300px"
-              />
+              <CodeEditor v-model="file.content" :filename="file.filename" height="300px" />
             </div>
 
             <div v-if="file.markedForDeletion" class="text-negative q-mt-xs">
@@ -149,12 +161,7 @@
           data-test="delete-button-bottom"
         />
         <q-space />
-        <q-btn
-          flat
-          label="Cancel"
-          @click="handleClose"
-          data-test="cancel-button"
-        />
+        <q-btn flat label="Cancel" @click="handleClose" data-test="cancel-button" />
         <q-btn
           color="primary"
           label="Save Changes"
@@ -176,11 +183,12 @@ import { useUIStore } from 'src/stores/ui'
 import { useGistsStore } from 'src/stores/gists'
 import isValidFilenameLib from 'valid-filename'
 import CodeEditor from 'src/components/CodeEditor.vue'
+import { formatCode, canFormat } from 'src/services/formatter'
 
 interface FileEntry {
   filename: string
   content: string
-  originalName: string | null  // null for new files
+  originalName: string | null // null for new files
   isNew: boolean
   markedForDeletion: boolean
 }
@@ -196,13 +204,17 @@ const updatedAt = ref('')
 const files = ref<FileEntry[]>([])
 const isLoading = ref(false)
 const isSubmitting = ref(false)
+const formattingIndex = ref<number | null>(null)
 
 // Load gist data when dialog opens
-watch(() => uiStore.modals.editGist, (isOpen) => {
-  if (isOpen && gistsStore.activeGist) {
-    loadGistData()
+watch(
+  () => uiStore.modals.editGist,
+  isOpen => {
+    if (isOpen && gistsStore.activeGist) {
+      loadGistData()
+    }
   }
-})
+)
 
 function loadGistData() {
   const gist = gistsStore.activeGist
@@ -240,11 +252,7 @@ function isValidFilename(name: string): boolean {
 
 const isValid = computed(() => {
   // At least one non-deleted file with filename and content
-  return files.value.some(f =>
-    !f.markedForDeletion &&
-    f.filename.trim() &&
-    f.content.trim()
-  )
+  return files.value.some(f => !f.markedForDeletion && f.filename.trim() && f.content.trim())
 })
 
 function addFile() {
@@ -266,6 +274,51 @@ function removeFile(index: number) {
     // Existing files are marked for deletion
     file.markedForDeletion = true
     file.content = '' // Clear content to signal deletion
+  }
+}
+
+async function handleFormatFile(index: number) {
+  const file = files.value[index]
+  if (!file.content || !canFormat(file.filename)) {
+    $q.notify({
+      type: 'info',
+      message: 'This file type cannot be formatted',
+      icon: 'info',
+      timeout: 2000
+    })
+    return
+  }
+
+  formattingIndex.value = index
+
+  try {
+    const result = await formatCode(file.content, file.filename)
+
+    if (result.success && result.formatted) {
+      file.content = result.formatted
+      $q.notify({
+        type: 'positive',
+        message: 'Code formatted',
+        icon: 'check_circle',
+        timeout: 1500
+      })
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: result.error || 'Failed to format code',
+        icon: 'error',
+        timeout: 3000
+      })
+    }
+  } catch (error) {
+    console.error('Format error:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to format code',
+      icon: 'error'
+    })
+  } finally {
+    formattingIndex.value = null
   }
 }
 

@@ -21,19 +21,21 @@ class GitHubAPIService {
   constructor() {
     // Use proxy in browser/development mode, direct API in Electron
     // Check if we're running in Electron by looking for window.require
-    const isElectron = typeof window !== 'undefined' && typeof (window as Window & { require?: unknown }).require !== 'undefined'
+    const isElectron =
+      typeof window !== 'undefined' &&
+      typeof (window as Window & { require?: unknown }).require !== 'undefined'
     this.baseURL = isElectron ? 'https://api.github.com' : '/api/github'
 
     this.client = axios.create({
       timeout: TIMEOUT,
       headers: {
         'User-Agent': USER_AGENT,
-        'Accept': 'application/vnd.github.v3+json'
+        Accept: 'application/vnd.github.v3+json'
       }
     })
 
     // Request interceptor to add auth token
-    this.client.interceptors.request.use((config) => {
+    this.client.interceptors.request.use(config => {
       if (this.token) {
         config.headers.Authorization = `token ${this.token}`
       }
@@ -44,8 +46,8 @@ class GitHubAPIService {
 
     // Response interceptor for error handling
     this.client.interceptors.response.use(
-      (response) => response,
-      (error) => {
+      response => response,
+      error => {
         console.error(`${TAG} Request failed:`, error.message)
         return Promise.reject(error)
       }
@@ -115,7 +117,7 @@ class GitHubAPIService {
       },
       {
         headers: {
-          'Accept': 'application/json'
+          Accept: 'application/json'
         },
         timeout: TIMEOUT
       }
@@ -163,8 +165,8 @@ class GitHubAPIService {
 
     console.debug(`${TAG} Fetched ${gistList.length} gists (lightweight, no file content)`)
 
-    return gistList.sort((a, b) =>
-      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    return gistList.sort(
+      (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
     )
   }
 
@@ -200,18 +202,14 @@ class GitHubAPIService {
     // Fetch remaining pages in parallel
     const pagePromises: Promise<Gist[]>[] = []
     for (let page = 2; page <= maxPage; page++) {
-      pagePromises.push(
-        this.fetchGistPage(username, page).then(response => response.data)
-      )
+      pagePromises.push(this.fetchGistPage(username, page).then(response => response.data))
     }
 
     const additionalPages = await Promise.all(pagePromises)
     additionalPages.forEach(pageGists => gists.push(...pageGists))
 
     // Sort by updated_at (newest first)
-    return gists.sort((a, b) =>
-      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-    )
+    return gists.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
   }
 
   /**
@@ -384,22 +382,22 @@ class GitHubAPIService {
    */
   async findSettingsGist(): Promise<Gist | null> {
     console.debug(`${TAG} Looking for settings gist`)
-    
+
     try {
       const response = await this.client.get<Gist[]>('/gists', {
         params: { per_page: 100 }
       })
-      
-      const settingsGist = response.data.find(gist => 
-        !gist.public && 
-        Object.keys(gist.files).some(name => name === '.qepton-settings.json')
+
+      const settingsGist = response.data.find(
+        gist =>
+          !gist.public && Object.keys(gist.files).some(name => name === '.qepton-settings.json')
       )
-      
+
       if (settingsGist) {
         console.debug(`${TAG} Found settings gist: ${settingsGist.id}`)
         return await this.getSingleGist(settingsGist.id)
       }
-      
+
       console.debug(`${TAG} No settings gist found`)
       return null
     } catch (error) {
@@ -413,7 +411,7 @@ class GitHubAPIService {
    */
   async createSettingsGist(settings: Record<string, unknown>): Promise<Gist> {
     console.debug(`${TAG} Creating settings gist`)
-    
+
     return await this.createGist(
       'Qepton Settings (do not delete)',
       {
@@ -430,16 +428,12 @@ class GitHubAPIService {
    */
   async updateSettingsGist(gistId: string, settings: Record<string, unknown>): Promise<Gist> {
     console.debug(`${TAG} Updating settings gist ${gistId}`)
-    
-    return await this.updateGist(
-      gistId,
-      'Qepton Settings (do not delete)',
-      {
-        '.qepton-settings.json': {
-          content: JSON.stringify(settings, null, 2)
-        }
+
+    return await this.updateGist(gistId, 'Qepton Settings (do not delete)', {
+      '.qepton-settings.json': {
+        content: JSON.stringify(settings, null, 2)
       }
-    )
+    })
   }
 
   /**
@@ -448,11 +442,11 @@ class GitHubAPIService {
   async getSettings(): Promise<{ gistId: string; settings: Record<string, unknown> } | null> {
     const gist = await this.findSettingsGist()
     if (!gist) return null
-    
+
     try {
       const file = gist.files['.qepton-settings.json']
       if (!file?.content) return null
-      
+
       return {
         gistId: gist.id,
         settings: JSON.parse(file.content)
@@ -471,7 +465,7 @@ class GitHubAPIService {
       await this.updateSettingsGist(existingGistId, settings)
       return existingGistId
     }
-    
+
     const gist = await this.createSettingsGist(settings)
     return gist.id
   }
