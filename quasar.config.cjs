@@ -11,17 +11,9 @@ const packageJson = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'ut
 
 module.exports = function (ctx) {
   return {
-    supportTS: {
-      tsCheckerConfig: {
-        eslint: {
-          enabled: true,
-          files: './src/**/*.{ts,tsx,js,jsx,vue}'
-        }
-      }
-    },
+    // TypeScript is auto-detected in @quasar/app-vite v2
 
     boot: [
-      'pinia',
       'axios',
       'i18n',
       'app-init',
@@ -97,7 +89,7 @@ module.exports = function (ctx) {
     },
 
     pwa: {
-      workboxMode: 'generateSW',
+      workboxMode: 'GenerateSW',
       injectPwaMetaTags: true,
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',

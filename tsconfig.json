@@ -1,5 +1,4 @@
 {
-  "extends": "@quasar/app-vite/tsconfig-preset",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",

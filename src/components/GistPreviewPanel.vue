@@ -18,21 +18,26 @@
         <div class="row items-start">
           <div class="col">
             <div class="text-h6 text-weight-bold">{{ gistTitle }}</div>
-            <div class="row items-center q-gutter-xs q-mt-xs">
-              <q-icon
-                :name="activeGist.public ? 'public' : 'lock'"
-                :color="activeGist.public ? 'positive' : 'warning'"
-                size="sm"
-              />
-              <span
-                :class="activeGist.public ? 'text-positive' : 'text-warning'"
-                class="text-caption"
-              >
-                {{ activeGist.public ? 'Public' : 'Secret' }}
-              </span>
+            <div class="row items-center q-gutter-sm q-mt-xs">
+              <div class="row items-center no-wrap">
+                <q-icon
+                  :name="activeGist.public ? 'public' : 'lock'"
+                  :color="activeGist.public ? 'positive' : 'warning'"
+                  size="sm"
+                  class="q-mr-xs"
+                />
+                <span
+                  :class="activeGist.public ? 'text-positive' : 'text-warning'"
+                  class="text-caption"
+                >
+                  {{ activeGist.public ? 'Public' : 'Secret' }}
+                </span>
+              </div>
+              <span class="text-grey-5">•</span>
               <q-chip dense size="sm" color="grey-8" text-color="white">
                 {{ fileCount }} {{ fileCount === 1 ? 'file' : 'files' }}
               </q-chip>
+              <span class="text-grey-5">•</span>
               <span class="text-caption text-grey-6">
                 Updated {{ formatDate(activeGist.updated_at) }}
               </span>
