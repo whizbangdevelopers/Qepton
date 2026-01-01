@@ -58,3 +58,15 @@ test-results/
 tmp/
 pat.txt
 private user notes.txt
+
+# Internal/Private documentation
+/docs/
+luminous-plotting-toucan.md
+repo.md
+
+# Local AI tool configs
+.claude/
+.mcp.json
+
+# Logs
+logs/
