@@ -3,7 +3,13 @@
     <!-- Header (hidden in immersive mode) -->
     <q-header v-if="!uiStore.immersiveMode" elevated>
       <q-toolbar>
-        <q-toolbar-title class="text-h6"> Qepton </q-toolbar-title>
+        <div class="logo-container">
+          <img
+            src="src/assets/images/logos/qepton-wordmark.svg"
+            alt="Qepton"
+            class="toolbar-logo"
+          />
+        </div>
 
         <q-space />
 
@@ -226,7 +232,21 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .q-toolbar {
-  background: var(--q-primary);
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
   color: white;
+  min-height: 64px;
+  padding: 8px 16px;
+}
+
+.logo-container {
+  width: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toolbar-logo {
+  height: 48px;
+  width: auto;
 }
 </style>

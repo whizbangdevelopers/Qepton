@@ -8,8 +8,12 @@
     transition-hide="slide-down"
   >
     <q-card class="dashboard-dialog">
-      <q-card-section class="row items-center bg-primary text-white">
-        <q-icon name="dashboard" size="sm" class="q-mr-sm" />
+      <q-card-section class="row items-center text-white dashboard-header">
+        <img
+          src="src/assets/images/logos/qepton-wordmark.svg"
+          alt="Qepton"
+          class="dashboard-logo q-mr-sm"
+        />
         <div class="text-h6">Dashboard</div>
         <q-space />
         <div class="text-caption q-mr-md">
@@ -162,11 +166,10 @@
                     clickable
                     color="primary"
                     text-color="white"
-                    size="sm"
                     @click="navigateToTag(tag.name)"
                   >
                     {{ tag.displayName }}
-                    <q-badge floating color="white" text-color="primary">
+                    <q-badge color="white" text-color="primary" class="q-ml-xs">
                       {{ tag.count }}
                     </q-badge>
                   </q-chip>
@@ -366,6 +369,34 @@ function selectGist(gist: Gist) {
   display: flex;
   flex-direction: column;
   max-height: 100vh;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%) !important;
+
+  :deep(*) {
+    color: #ffffff !important;
+    opacity: 1 !important;
+  }
+
+  .text-h6 {
+    font-weight: 600;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .text-caption,
+  .text-caption span {
+    font-weight: 500;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.dashboard-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
 }
 
 .dashboard-content {
