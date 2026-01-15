@@ -1,9 +1,15 @@
 import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import os from 'os'
-import { autoUpdater } from 'electron-updater'
+import electronUpdater from 'electron-updater'
+const { autoUpdater } = electronUpdater
 import windowStateKeeper from 'electron-window-state'
 import nconf from 'nconf'
+
+// ESM compatibility - __dirname is not available in ESM
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -42,14 +48,19 @@ function createWindow() {
     icon: path.resolve(__dirname, 'icons/icon.png'),
     webPreferences: {
       contextIsolation: true,
-      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD as string)
+      preload: path.resolve(
+        __dirname,
+        process.env.QUASAR_ELECTRON_PRELOAD || 'electron-preload.cjs'
+      )
     }
   })
 
   // Track window state
   mainWindowState.manage(mainWindow)
 
-  mainWindow.loadURL(process.env.APP_URL as string)
+  // Load the app URL - in dev it's from env, in production it's the local index.html
+  const appUrl = process.env.APP_URL || `file://${path.join(__dirname, 'index.html')}`
+  mainWindow.loadURL(appUrl)
 
   if (process.env.DEBUGGING) {
     mainWindow.webContents.openDevTools()
@@ -331,7 +342,9 @@ function setupAutoUpdater() {
 
   // Check for updates after a short delay
   setTimeout(() => {
-    autoUpdater.checkForUpdates()
+    autoUpdater.checkForUpdates().catch(err => {
+      console.log('Update check failed (this is normal for development builds):', err.message)
+    })
   }, 3000)
 }
 

@@ -4,6 +4,11 @@
 
 declare const __APP_VERSION__: string
 
+declare module '*.svg' {
+  const src: string
+  export default src
+}
+
 declare module 'markdown-it-task-lists' {
   import type MarkdownIt from 'markdown-it'
   const plugin: MarkdownIt.PluginSimple

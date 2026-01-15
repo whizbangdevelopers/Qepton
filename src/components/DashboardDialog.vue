@@ -10,7 +10,7 @@
     <q-card class="dashboard-dialog">
       <q-card-section class="row items-center text-white dashboard-header">
         <img
-          src="src/assets/images/logos/qepton-wordmark.svg"
+          :src="logoUrl"
           alt="Qepton"
           class="dashboard-logo q-mr-sm"
         />
@@ -231,6 +231,7 @@ import { useUIStore } from 'src/stores/ui'
 import { useGistsStore } from 'src/stores/gists'
 import { parseDescription } from 'src/services/parser'
 import type { Gist } from 'src/types/github'
+import logoUrl from 'src/assets/images/logos/qepton-wordmark.svg'
 
 const uiStore = useUIStore()
 const gistsStore = useGistsStore()

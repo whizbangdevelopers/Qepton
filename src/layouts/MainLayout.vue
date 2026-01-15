@@ -5,7 +5,7 @@
       <q-toolbar>
         <div class="logo-container">
           <img
-            src="src/assets/images/logos/qepton-wordmark.svg"
+            :src="logoUrl"
             alt="Qepton"
             class="toolbar-logo"
           />
@@ -128,6 +128,7 @@ import { useQuasar } from 'quasar'
 import { useUIStore } from 'src/stores/ui'
 import { useGistsStore } from 'src/stores/gists'
 import { themeService } from 'src/services/theme'
+import logoUrl from 'src/assets/images/logos/qepton-wordmark.svg'
 import NavigationPanel from 'src/components/NavigationPanel.vue'
 import NewGistDialog from 'src/components/NewGistDialog.vue'
 import EditGistDialog from 'src/components/EditGistDialog.vue'

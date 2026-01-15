@@ -3,7 +3,7 @@
     <q-card class="login-card">
       <q-card-section class="text-center logo-section">
         <img
-          src="src/assets/images/logos/qepton-wordmark-dark.svg"
+          :src="logoUrl"
           alt="Qepton"
           class="login-logo"
         />
@@ -72,6 +72,7 @@ import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 import { useGistsStore } from 'src/stores/gists'
 import { useSimpleMeta } from 'src/composables/useMeta'
+import logoUrl from 'src/assets/images/logos/qepton-wordmark-dark.svg'
 
 const router = useRouter()
 const $q = useQuasar()

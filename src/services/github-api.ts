@@ -27,10 +27,9 @@ class GitHubAPIService {
 
   constructor() {
     // Use proxy in browser/development mode, direct API in Electron
-    // Check if we're running in Electron by looking for window.require
+    // Check if we're running in Electron by looking for the navigator userAgent
     const isElectron =
-      typeof window !== 'undefined' &&
-      typeof (window as Window & { require?: unknown }).require !== 'undefined'
+      typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('electron')
     this.baseURL = isElectron ? 'https://api.github.com' : '/api/github'
 
     this.client = axios.create({

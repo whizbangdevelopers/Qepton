@@ -208,7 +208,7 @@ module.exports = function (ctx) {
         linux: {
           icon: 'src-electron/icons/',
           category: 'Development',
-          target: ['AppImage', 'snap'],
+          target: ['AppImage'],
           desktop: {
             Icon: 'qepton'
           }
@@ -216,8 +216,8 @@ module.exports = function (ctx) {
 
         publish: [{
           provider: 'github',
-          owner: 'hackjutsu',
-          repo: 'Lepton'
+          owner: 'whizbangdevelopers',
+          repo: 'Qepton-Dev'
         }]
       }
     },
