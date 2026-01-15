@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.cosmox.Qepton</id>
+  <name>Qepton</name>
+  <summary>Code Snippet Manager powered by GitHub Gist</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer_name>whizBANG Developers</developer_name>
+
+  <description>
+    <p>
+      Qepton is a powerful code snippet manager that connects to GitHub Gist.
+      Built with Vue 3 and Quasar Framework, it provides a modern, responsive
+      interface for managing your code snippets.
+    </p>
+    <p>Features include:</p>
+    <ul>
+      <li>Full GitHub Gist integration</li>
+      <li>Smart tagging with auto-detection by language</li>
+      <li>Fuzzy search across all snippets</li>
+      <li>Syntax highlighting with CodeMirror 6</li>
+      <li>Markdown preview with KaTeX math support</li>
+      <li>Jupyter notebook support</li>
+      <li>Dark mode</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">com.cosmox.Qepton.desktop</launchable>
+
+  <url type="homepage">https://github.com/whizbangdevelopers/Qepton</url>
+  <url type="bugtracker">https://github.com/whizbangdevelopers/Qepton/issues</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main interface with gist list and preview</caption>
+      <image>https://raw.githubusercontent.com/whizbangdevelopers/Qepton/main/screenshots/main.png</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.1" />
+
+  <releases>
+    <release version="1.0.0" date="2025-01-15">
+      <description>
+        <p>Initial release</p>
+      </description>
+    </release>
+  </releases>
+
+  <categories>
+    <category>Development</category>
+    <category>Utility</category>
+  </categories>
+
+  <keywords>
+    <keyword>gist</keyword>
+    <keyword>snippet</keyword>
+    <keyword>code</keyword>
+    <keyword>github</keyword>
+    <keyword>manager</keyword>
+  </keywords>
+</component>

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Qepton
+Comment=Code Snippet Manager powered by GitHub Gist
+Exec=qepton %U
+Icon=com.cosmox.Qepton
+Terminal=false
+Type=Application
+Categories=Development;Utility;
+Keywords=gist;snippet;code;github;
+StartupWMClass=Qepton

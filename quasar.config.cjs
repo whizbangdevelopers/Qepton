@@ -208,10 +208,49 @@ module.exports = function (ctx) {
         linux: {
           icon: 'src-electron/icons/',
           category: 'Development',
-          target: ['AppImage'],
+          target: ['AppImage', 'snap', 'deb', 'pacman', 'rpm'],
           desktop: {
-            Icon: 'qepton'
-          }
+            Icon: 'qepton',
+            Name: 'Qepton',
+            Comment: 'Code Snippet Manager powered by GitHub Gist',
+            Categories: 'Development;Utility;'
+          },
+          synopsis: 'Code Snippet Manager',
+          description: 'A powerful code snippet manager that connects to GitHub Gist. Features include smart tagging, fuzzy search, syntax highlighting, and multi-platform support.',
+          maintainer: 'whizBANG Developers'
+        },
+
+        snap: {
+          confinement: 'strict',
+          grade: 'stable',
+          summary: 'Code Snippet Manager powered by GitHub Gist',
+          plugs: [
+            'default',
+            'desktop',
+            'desktop-legacy',
+            'home',
+            'x11',
+            'wayland',
+            'unity7',
+            'browser-support',
+            'network',
+            'network-bind',
+            'password-manager-service'
+          ]
+        },
+
+        deb: {
+          depends: ['libgtk-3-0', 'libnotify4', 'libnss3', 'libxss1', 'libxtst6', 'xdg-utils', 'libatspi2.0-0', 'libuuid1', 'libsecret-1-0'],
+          category: 'Development',
+          priority: 'optional'
+        },
+
+        pacman: {
+          depends: ['gtk3', 'libnotify', 'nss', 'libxss', 'libxtst', 'xdg-utils', 'at-spi2-core', 'util-linux-libs', 'libsecret']
+        },
+
+        rpm: {
+          depends: ['gtk3', 'libnotify', 'nss', 'libXScrnSaver', 'libXtst', 'xdg-utils', 'at-spi2-core', 'libuuid', 'libsecret']
         },
 
         publish: [{
