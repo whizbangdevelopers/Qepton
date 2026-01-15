@@ -67,6 +67,14 @@ repo.md
 # Local AI tool configs
 .claude/
 .mcp.json
+.zencoder/
+.zenflow/
+
+# CI configs (private)
+.drone.yml
+
+# Test coverage reports
+coverage/
 
 # GitHub workflows (private)
 .github/
