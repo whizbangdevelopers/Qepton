@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.cosmox.Qepton</id>
+  <id>com.whizbangdevelopers.Qepton</id>
   <name>Qepton</name>
   <summary>Code Snippet Manager powered by GitHub Gist</summary>
   <metadata_license>CC0-1.0</metadata_license>
@@ -25,7 +25,7 @@
     </ul>
   </description>
 
-  <launchable type="desktop-id">com.cosmox.Qepton.desktop</launchable>
+  <launchable type="desktop-id">com.whizbangdevelopers.Qepton.desktop</launchable>
 
   <url type="homepage">https://github.com/whizbangdevelopers/Qepton</url>
   <url type="bugtracker">https://github.com/whizbangdevelopers/Qepton/issues</url>

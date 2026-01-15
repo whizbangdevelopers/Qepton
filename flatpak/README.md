@@ -61,7 +61,7 @@ This will:
 
 Then run:
 ```bash
-flatpak run com.cosmox.Qepton
+flatpak run com.whizbangdevelopers.Qepton
 ```
 
 ## Output
@@ -71,9 +71,9 @@ flatpak run com.cosmox.Qepton
 
 ## Files
 
-- `com.cosmox.Qepton.yml` - Flatpak manifest
-- `com.cosmox.Qepton.desktop` - Desktop entry file
-- `com.cosmox.Qepton.metainfo.xml` - AppStream metadata
+- `com.whizbangdevelopers.Qepton.yml` - Flatpak manifest
+- `com.whizbangdevelopers.Qepton.desktop` - Desktop entry file
+- `com.whizbangdevelopers.Qepton.metainfo.xml` - AppStream metadata
 - `qepton.sh` - Wrapper script for Electron
 
 ## Publishing to Flathub

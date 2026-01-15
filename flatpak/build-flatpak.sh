@@ -62,11 +62,11 @@ build_flatpak() {
     mkdir -p "$REPO_DIR"
 
     # Build
-    flatpak-builder --force-clean --repo="$REPO_DIR" build-dir com.cosmox.Qepton.yml
+    flatpak-builder --force-clean --repo="$REPO_DIR" build-dir com.whizbangdevelopers.Qepton.yml
 
     # Create bundle
     log_info "Creating Flatpak bundle..."
-    flatpak build-bundle "$REPO_DIR" qepton.flatpak com.cosmox.Qepton
+    flatpak build-bundle "$REPO_DIR" qepton.flatpak com.whizbangdevelopers.Qepton
 
     log_info "Flatpak bundle created: $SCRIPT_DIR/qepton.flatpak"
 }
@@ -75,7 +75,7 @@ build_flatpak() {
 install_local() {
     log_info "Installing Flatpak locally..."
     flatpak --user install -y "$SCRIPT_DIR/qepton.flatpak"
-    log_info "Installed! Run with: flatpak run com.cosmox.Qepton"
+    log_info "Installed! Run with: flatpak run com.whizbangdevelopers.Qepton"
 }
 
 # Main

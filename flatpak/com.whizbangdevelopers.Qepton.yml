@@ -1,4 +1,4 @@
-app-id: com.cosmox.Qepton
+app-id: com.whizbangdevelopers.Qepton
 runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
@@ -33,10 +33,10 @@ modules:
     buildsystem: simple
     build-commands:
       - install -Dm755 qepton.sh /app/bin/qepton
-      - install -Dm644 com.cosmox.Qepton.desktop /app/share/applications/com.cosmox.Qepton.desktop
-      - install -Dm644 com.cosmox.Qepton.metainfo.xml /app/share/metainfo/com.cosmox.Qepton.metainfo.xml
-      - install -Dm644 icons/128x128.png /app/share/icons/hicolor/128x128/apps/com.cosmox.Qepton.png
-      - install -Dm644 icons/256x256.png /app/share/icons/hicolor/256x256/apps/com.cosmox.Qepton.png
+      - install -Dm644 com.whizbangdevelopers.Qepton.desktop /app/share/applications/com.whizbangdevelopers.Qepton.desktop
+      - install -Dm644 com.whizbangdevelopers.Qepton.metainfo.xml /app/share/metainfo/com.whizbangdevelopers.Qepton.metainfo.xml
+      - install -Dm644 icons/128x128.png /app/share/icons/hicolor/128x128/apps/com.whizbangdevelopers.Qepton.png
+      - install -Dm644 icons/256x256.png /app/share/icons/hicolor/256x256/apps/com.whizbangdevelopers.Qepton.png
       - cp -r app /app/qepton
     sources:
       - type: dir
@@ -44,9 +44,9 @@ modules:
       - type: file
         path: qepton.sh
       - type: file
-        path: com.cosmox.Qepton.desktop
+        path: com.whizbangdevelopers.Qepton.desktop
       - type: file
-        path: com.cosmox.Qepton.metainfo.xml
+        path: com.whizbangdevelopers.Qepton.metainfo.xml
       - type: dir
         path: ../src-electron/icons
         dest: icons
