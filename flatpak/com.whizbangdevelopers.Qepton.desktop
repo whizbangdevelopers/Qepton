@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Qepton
-Comment=Code Snippet Manager powered by GitHub Gist
+Comment=Prompt and Code Snippet Manager powered by GitHub Gist
 Exec=qepton %U
 Icon=com.whizbangdevelopers.Qepton
 Terminal=false

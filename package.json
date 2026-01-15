@@ -1,7 +1,7 @@
 {
   "name": "qepton",
   "version": "1.0.0",
-  "description": "Code Snippet Manager powered by GitHub Gist - Quasar Edition",
+  "description": "Prompt and Code Snippet Manager powered by GitHub Gist - Quasar Edition",
   "productName": "Qepton",
   "author": "whizBANG Developers",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "test:unit": "vitest",
     "test:unit:run": "vitest run",
     "test:unit:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
     "clean": "rm -rf node_modules/.vite .quasar .q-cache 2>/dev/null; echo 'Cleared caches'"
   },
   "dependencies": {

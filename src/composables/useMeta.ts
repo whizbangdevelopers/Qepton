@@ -27,7 +27,7 @@ export function usePageMeta(options: MetaOptions = {}) {
   useMeta({
     title,
     meta: {
-      description: { name: 'description', content: options.description || 'Code Snippet Manager' },
+      description: { name: 'description', content: options.description || 'Prompt and Code Snippet Manager' },
       ogTitle: { property: 'og:title', content: options.ogTitle || title },
       ogDescription: {
         property: 'og:description',
@@ -49,7 +49,7 @@ export function useGistMeta() {
     if (!gist) {
       return {
         title: APP_NAME,
-        description: 'Code Snippet Manager'
+        description: 'Prompt and Code Snippet Manager'
       }
     }
 
@@ -148,7 +148,7 @@ export function useSimpleMeta(title: string, description?: string) {
   useMeta({
     title: title ? `${title} - ${APP_NAME}` : APP_NAME,
     meta: {
-      description: { name: 'description', content: description || 'Code Snippet Manager' }
+      description: { name: 'description', content: description || 'Prompt and Code Snippet Manager' }
     }
   })
 }

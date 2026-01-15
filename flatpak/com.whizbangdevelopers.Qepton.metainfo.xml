@@ -2,14 +2,14 @@
 <component type="desktop-application">
   <id>com.whizbangdevelopers.Qepton</id>
   <name>Qepton</name>
-  <summary>Code Snippet Manager powered by GitHub Gist</summary>
+  <summary>Prompt and Code Snippet Manager powered by GitHub Gist</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
   <developer_name>whizBANG Developers</developer_name>
 
   <description>
     <p>
-      Qepton is a powerful code snippet manager that connects to GitHub Gist.
+      Qepton is a powerful prompt and code snippet manager that connects to GitHub Gist.
       Built with Vue 3 and Quasar Framework, it provides a modern, responsive
       interface for managing your code snippets.
     </p>

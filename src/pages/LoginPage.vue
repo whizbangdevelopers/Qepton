@@ -7,7 +7,7 @@
           alt="Qepton"
           class="login-logo"
         />
-        <div class="text-subtitle1 text-grey-7 q-mt-sm">Code Snippet Manager</div>
+        <div class="text-subtitle1 text-grey-7 q-mt-sm">Prompt and Code Snippet Manager</div>
       </q-card-section>
 
       <q-separator />

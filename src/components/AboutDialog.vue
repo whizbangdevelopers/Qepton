@@ -14,7 +14,7 @@
       <q-card-section class="text-center q-pt-md">
         <q-avatar size="80px" color="primary" text-color="white" icon="code" />
         <div class="text-h5 q-mt-md">Qepton</div>
-        <div class="text-subtitle1 text-grey">Code Snippet Manager</div>
+        <div class="text-subtitle1 text-grey">Prompt and Code Snippet Manager</div>
         <div class="text-caption text-grey q-mt-xs">Powered by GitHub Gist</div>
       </q-card-section>
 

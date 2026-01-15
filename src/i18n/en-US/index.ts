@@ -1,7 +1,7 @@
 export default {
   app: {
     name: 'Qepton',
-    tagline: 'Code Snippet Manager',
+    tagline: 'Prompt and Code Snippet Manager',
     version: 'Version {version}'
   },
 

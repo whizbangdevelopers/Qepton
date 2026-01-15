@@ -39,6 +39,9 @@ module.exports = function (ctx) {
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
+      // Set base path for GitHub Pages deployment
+      publicPath: ctx.mode.pwa ? '/Qepton/' : '/',
+
       extendViteConf (viteConf) {
         viteConf.define = viteConf.define || {}
         viteConf.define.__APP_VERSION__ = JSON.stringify(packageJson.version)
@@ -98,7 +101,7 @@ module.exports = function (ctx) {
       manifest: {
         name: 'Qepton',
         short_name: 'Qepton',
-        description: 'Code Snippet Manager powered by GitHub Gist',
+        description: 'Prompt and Code Snippet Manager powered by GitHub Gist',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -206,16 +209,17 @@ module.exports = function (ctx) {
         },
 
         linux: {
-          icon: 'src-electron/icons/',
+          icon: 'src-electron/icons/icon.png',
           category: 'Development',
-          target: ['AppImage', 'snap', 'deb', 'pacman', 'rpm'],
+          target: ['AppImage', 'deb'],
+          executableName: 'qepton',
           desktop: {
-            Icon: 'qepton',
             Name: 'Qepton',
-            Comment: 'Code Snippet Manager powered by GitHub Gist',
-            Categories: 'Development;Utility;'
+            Comment: 'Prompt and Code Snippet Manager powered by GitHub Gist',
+            Categories: 'Development;Utility;',
+            StartupWMClass: 'Qepton'
           },
-          synopsis: 'Code Snippet Manager',
+          synopsis: 'Prompt and Code Snippet Manager',
           description: 'A powerful code snippet manager that connects to GitHub Gist. Features include smart tagging, fuzzy search, syntax highlighting, and multi-platform support.',
           maintainer: 'whizBANG Developers'
         },
@@ -223,7 +227,8 @@ module.exports = function (ctx) {
         snap: {
           confinement: 'strict',
           grade: 'stable',
-          summary: 'Code Snippet Manager powered by GitHub Gist',
+          summary: 'Prompt and Code Snippet Manager powered by GitHub Gist',
+          publish: null,  // Don't publish to Snap Store, only to GitHub Releases
           plugs: [
             'default',
             'desktop',

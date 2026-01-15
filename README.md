@@ -2,12 +2,15 @@
 
 <div align="center">
 
-**Enhanced Multi-Platform Code Snippet Manager**
+**Enhanced Multi-Platform Prompt and Code Snippet Manager**
 
+[![Tests](https://github.com/whizbangdevelopers/Qepton/actions/workflows/test.yml/badge.svg)](https://github.com/whizbangdevelopers/Qepton/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)](https://vuejs.org/)
 [![Quasar](https://img.shields.io/badge/Quasar-2.x-1976D2?logo=quasar)](https://quasar.dev/)
+
+**[Try the PWA](https://whizbangdevelopers.github.io/Qepton/)** | **[Download Desktop App](https://github.com/whizbangdevelopers/Qepton-Dev/releases)**
 
 </div>
 
@@ -91,6 +94,8 @@ Pre-built binaries are available in the [Releases](https://github.com/wriver4/qe
 - Run the `.exe` installer or extract the portable `.7z` archive
 
 ### PWA (Progressive Web App)
+
+**Live Demo:** [https://whizbangdevelopers.github.io/Qepton/](https://whizbangdevelopers.github.io/Qepton/)
 
 The PWA build can be deployed to any static hosting service:
 
