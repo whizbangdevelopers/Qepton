@@ -79,6 +79,7 @@ verify_remote() {
 push_to_target() {
   local remote="$1"
   local name="$2"
+  local target_repo="$3"
 
   echo -e "${CYAN}========================================${NC}"
   echo -e "${CYAN}Pushing to $name ($remote)${NC}"
@@ -122,6 +123,13 @@ push_to_target() {
     fi
   done
 
+  # Patch quasar.config.cjs to use the correct target repo for electron-builder
+  if [[ -n "$target_repo" ]]; then
+    echo -e "${YELLOW}Patching quasar.config.cjs for repo: $target_repo${NC}"
+    sed -i "s/repo: 'Qepton-Dev'/repo: '$target_repo'/" quasar.config.cjs
+    git add quasar.config.cjs
+  fi
+
   # Create a single clean commit with no AI references
   git commit -m "$RELEASE_MSG" >/dev/null 2>&1
 
@@ -164,17 +172,17 @@ push_tags() {
 
 case "$TARGET" in
   free)
-    push_to_target "free" "Qepton (Free)"
+    push_to_target "free" "Qepton (Free)" "Qepton"
     push_tags "free"
     ;;
   premium)
-    push_to_target "premium" "Qepton-Premium"
+    push_to_target "premium" "Qepton-Premium" "Qepton-Premium"
     push_tags "premium"
     ;;
   both)
-    push_to_target "free" "Qepton (Free)"
+    push_to_target "free" "Qepton (Free)" "Qepton"
     push_tags "free"
-    push_to_target "premium" "Qepton-Premium"
+    push_to_target "premium" "Qepton-Premium" "Qepton-Premium"
     push_tags "premium"
     ;;
   *)
