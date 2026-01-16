@@ -68,6 +68,7 @@ The script automatically excludes dev-only files:
 - `docs/`
 - `flatpak/`
 - `playwright.config.ts`
+- `vitest.config.ts`
 - `CLAUDE.md`
 - `TESTING.md`
 - `DEVELOPMENT.md`

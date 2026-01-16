@@ -29,6 +29,7 @@ DEV_ONLY_PATTERNS=(
   "docs/"
   "flatpak/"
   "playwright.config.ts"
+  "vitest.config.ts"
   "CLAUDE.md"
   "TESTING.md"
   "DEVELOPMENT.md"
