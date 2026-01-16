@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Git Commit Guidelines
+
+**IMPORTANT:** Do NOT add `Co-Authored-By` lines to commit messages in this repository. Keep commit messages clean without any AI attribution.
+
 ## Project Overview
 
 Qepton is a code snippet manager powered by GitHub Gist. It's a multi-platform application built with the Quasar Framework (Vue 3) supporting Electron desktop, PWA, and Capacitor mobile deployments.

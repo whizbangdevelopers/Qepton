@@ -93,7 +93,17 @@ push_to_target() {
   # Get current branch and commit info
   CURRENT_BRANCH=$(git branch --show-current)
   CURRENT_COMMIT=$(git rev-parse HEAD)
-  COMMIT_MSG=$(git log -1 --format="%s")
+
+  # Get version from package.json
+  VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "")
+
+  # Create a clean release commit message (no AI co-author references)
+  if [[ -n "$VERSION" ]]; then
+    RELEASE_MSG="Release v${VERSION}"
+  else
+    # Fallback: use first line of commit message, stripped of any co-author info
+    RELEASE_MSG=$(git log -1 --format="%s")
+  fi
 
   # Create a temporary branch for the filtered push
   TEMP_BRANCH="release-to-${remote}-$$"
@@ -119,11 +129,12 @@ push_to_target() {
       echo "  - $f"
     done
 
-    # Remove files and amend commit
+    # Remove files and create clean release commit
     git rm -rf --cached $FILES_TO_REMOVE >/dev/null 2>&1 || true
-    git commit --amend -m "$COMMIT_MSG" --no-edit >/dev/null 2>&1 || true
+    git commit --amend -m "$RELEASE_MSG" >/dev/null 2>&1 || true
   else
-    echo -e "${GREEN}No dev-only files to remove${NC}"
+    # Still amend to use clean release message
+    git commit --amend -m "$RELEASE_MSG" >/dev/null 2>&1 || true
   fi
 
   # Push the filtered branch to target's main
