@@ -105,41 +105,31 @@ push_to_target() {
     RELEASE_MSG=$(git log -1 --format="%s")
   fi
 
-  # Create a temporary branch for the filtered push
+  # Create a temporary orphan branch (no history) for clean release
   TEMP_BRANCH="release-to-${remote}-$$"
 
-  echo -e "${YELLOW}Creating filtered commit (excluding dev-only files)...${NC}"
+  echo -e "${YELLOW}Creating clean release commit (no history)...${NC}"
 
-  # Start from current HEAD
-  git checkout -b "$TEMP_BRANCH" 2>/dev/null
+  # Create orphan branch - this starts with no history
+  git checkout --orphan "$TEMP_BRANCH" 2>/dev/null
 
-  # Check if any dev-only files are tracked and remove them from this branch
-  FILES_TO_REMOVE=""
+  # Remove dev-only files from the index
   for pattern in "${DEV_ONLY_PATTERNS[@]}"; do
-    # Find tracked files matching this pattern
     MATCHED=$(git ls-files "$pattern" 2>/dev/null || true)
     if [[ -n "$MATCHED" ]]; then
-      FILES_TO_REMOVE="$FILES_TO_REMOVE $MATCHED"
+      echo -e "${YELLOW}Excluding:${NC} $pattern"
+      git rm -rf --cached $MATCHED >/dev/null 2>&1 || true
     fi
   done
 
-  if [[ -n "$FILES_TO_REMOVE" ]]; then
-    echo -e "${YELLOW}Removing dev-only files from release commit:${NC}"
-    for f in $FILES_TO_REMOVE; do
-      echo "  - $f"
-    done
+  # Create a single clean commit with no AI references
+  git commit -m "$RELEASE_MSG" >/dev/null 2>&1
 
-    # Remove files and create clean release commit
-    git rm -rf --cached $FILES_TO_REMOVE >/dev/null 2>&1 || true
-    git commit --amend -m "$RELEASE_MSG" >/dev/null 2>&1 || true
-  else
-    # Still amend to use clean release message
-    git commit --amend -m "$RELEASE_MSG" >/dev/null 2>&1 || true
-  fi
+  echo -e "${GREEN}Created clean commit: $RELEASE_MSG${NC}"
 
-  # Push the filtered branch to target's main
-  echo -e "${YELLOW}Pushing to $remote/main...${NC}"
-  if git push "$remote" "$TEMP_BRANCH:main" --force-with-lease; then
+  # Push the orphan branch to target's main (force required for history rewrite)
+  echo -e "${YELLOW}Pushing to $remote/main (replacing history)...${NC}"
+  if git push "$remote" "$TEMP_BRANCH:main" --force; then
     echo -e "${GREEN}✓ Successfully pushed to $name${NC}"
   else
     echo -e "${RED}✗ Failed to push to $name${NC}"
