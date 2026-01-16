@@ -54,6 +54,8 @@
     "@types/prismjs": "^1.26.5",
     "autolinker": "^4.0.0",
     "axios": "^1.6.5",
+    "electron-updater": "^6.1.7",
+    "electron-window-state": "^5.0.3",
     "fuse.js": "^7.0.0",
     "highlight.js": "^11.9.0",
     "markdown-it": "^14.0.0",
@@ -73,9 +75,7 @@
     "vue": "^3.4.0",
     "vue-codemirror": "^6.1.1",
     "vue-i18n": "^9.9.0",
-    "vue-router": "^4.2.5",
-    "electron-updater": "^6.1.7",
-    "electron-window-state": "^5.0.3"
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@capacitor/android": "^5.6.0",
@@ -87,7 +87,7 @@
     "@quasar/app-vite": "^2.4.0",
     "@types/markdown-it": "^13.0.7",
     "@types/nconf": "^0.10.7",
-    "@types/node": "^20.10.6",
+    "@types/node": "^20.19.30",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
     "@vitejs/plugin-vue": "^6.0.3",
