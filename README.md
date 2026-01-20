@@ -7,6 +7,7 @@
 [![Tests](https://github.com/whizbangdevelopers/Qepton-Dev/actions/workflows/test.yml/badge.svg)](https://github.com/whizbangdevelopers/Qepton-Dev/actions/workflows/test.yml)
 [![Unit Tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/whizbangdevelopers/a129d60da2b3f8f57b6a578bf7347eef/raw/vitest-badge.json)](https://github.com/whizbangdevelopers/Qepton-Dev/actions/workflows/test.yml)
 [![E2E Tests](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/whizbangdevelopers/a129d60da2b3f8f57b6a578bf7347eef/raw/playwright-badge.json)](https://github.com/whizbangdevelopers/Qepton-Dev/tree/main/tests/e2e)
+[![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot)](https://github.com/whizbangdevelopers/Qepton-Dev/network/updates)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)](https://vuejs.org/)
