@@ -68,7 +68,7 @@ jobs:
             --body "This issue has been accepted and copied to our internal tracker for development."
 
       - name: Checkout Dev repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: whizbangdevelopers/Qepton-Dev
           token: ${{ secrets.QEPTON_FREE_REPO_PAT }}
