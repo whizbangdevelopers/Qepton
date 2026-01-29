@@ -199,11 +199,25 @@ Unit tests use Vitest:
 npm run test:unit
 ```
 
-E2E tests use Playwright (via Docker):
-```bash
-cd e2e-docker
-./scripts/run-tests.sh
-```
+## Release Verification
+
+All releases are automatically tested after deployment:
+
+| Platform      | Format         | Automated Tests           | Status |
+| ------------- | -------------- | ------------------------- | ------ |
+| Web           | PWA            | Load, assets, OAuth config| ✅ CI  |
+| Linux         | AppImage       | Launch smoke test         | ✅ CI  |
+| Linux         | deb            | Install verification      | ✅ CI  |
+| Windows       | NSIS installer | Silent install            | ✅ CI  |
+| macOS         | DMG            | Mount and verify          | ✅ CI  |
+| Linux         | rpm            | Manual (Fedora VM)        | 🔧     |
+| Linux         | Flatpak        | Manual (Fedora VM)        | 🔧     |
+| Linux         | pacman         | Manual (Arch VM)          | 🔧     |
+
+**Legend:** ✅ CI = Automated in GitHub Actions | 🔧 = Manual verification
+
+The verification workflow runs automatically after each release and PWA deployment.
+See [workflow runs](https://github.com/whizbangdevelopers/Qepton/actions/workflows/verify-deployment.yml) for latest results.
 
 ## Release Verification
 
