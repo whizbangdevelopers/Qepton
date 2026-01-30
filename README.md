@@ -209,10 +209,11 @@ cd e2e-docker
 
 We test release artifacts on real hardware and VMs before publishing. This matrix shows current verification status.
 
+<!-- VERIFICATION-TABLE-START -->
 | Format        | Platform       | Test Environment    | Status | Last Verified |
 | ------------- | -------------- | ------------------- | ------ | ------------- |
-| NSIS (.exe)   | Windows x64    | Win10 Laptop        | ✅     | v1.0.12       |
-| Portable .7z  | Windows x64    | Win10 Laptop        | ✅     | v1.0.12       |
+| NSIS (.exe)   | Windows x64    | Win10 Laptop        | ✅     | v0.0.0-test   |
+| Portable .7z  | Windows x64    | Win10 Laptop        | ✅     | v0.0.0-test   |
 | DMG           | macOS arm64    | Mac Mini M1         | ✅     | v1.0.12       |
 | DMG           | macOS x64      | —                   | ⏸️     | No hardware   |
 | AppImage      | Linux x64      | Ubuntu Laptop       | ✅     | v1.0.12       |
@@ -221,13 +222,14 @@ We test release artifacts on real hardware and VMs before publishing. This matri
 | rpm           | Fedora         | Fedora VM (KVM)     | ⏳     | —             |
 | Flatpak       | Linux          | Fedora VM (KVM)     | ⏳     | —             |
 | pacman        | Arch Linux     | Arch VM (KVM)       | ⏳     | —             |
-| PWA           | Web            | GitHub Pages        | ✅     | v1.0.12       |
+| PWA           | Web            | GitHub Pages        | ✅     | v0.0.0-test   |
 | iOS           | Mobile         | —                   | 🔮     | Future        |
 | Android       | Mobile         | —                   | 🔮     | Future        |
+<!-- VERIFICATION-TABLE-END -->
 
 **Legend:** ✅ Verified | ⏳ Pending | ⏸️ Skipped | 🔮 Future
 
-See [Release Verification Issues](https://github.com/whizbangdevelopers-org/Qepton-Dev/issues?q=label%3Averification) for detailed test results per release.
+See [Release Verification Issues](https://github.com/whizbangdevelopers-org/Qepton-Dev/issues?q=label%3Arelease-verify) for detailed test results per release.
 
 ## Contributing
 
