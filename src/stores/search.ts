@@ -19,7 +19,8 @@ export const useSearchStore = defineStore('search', {
       visibility: 'all',
       languages: [],
       dateRange: 'all'
-    }
+    },
+    includeContent: false
   }),
 
   getters: {
@@ -118,10 +119,10 @@ export const useSearchStore = defineStore('search', {
           return
         }
 
-        // Use search service
-        this.results = searchService.search(query)
+        // Use search service with includeContent option
+        this.results = searchService.search(query, this.includeContent)
 
-        console.debug(`[Search] Query "${query}" returned ${this.results.length} results`)
+        console.debug(`[Search] Query "${query}" (content: ${this.includeContent}) returned ${this.results.length} results`)
       } catch (error) {
         console.error('[Search] Search failed:', error)
         this.results = []
@@ -264,6 +265,14 @@ export const useSearchStore = defineStore('search', {
     },
 
     /**
+     * Set include content option
+     */
+    setIncludeContent(value: boolean): void {
+      this.includeContent = value
+      console.debug(`[Search] Include content: ${value}`)
+    },
+
+    /**
      * Reset all search state (called on logout)
      */
     $reset(): void {
@@ -276,6 +285,7 @@ export const useSearchStore = defineStore('search', {
         languages: [],
         dateRange: 'all'
       }
+      this.includeContent = false
       console.debug('[Search] Store reset')
     }
   },

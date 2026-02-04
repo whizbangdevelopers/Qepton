@@ -399,6 +399,52 @@
               </div>
             </div>
 
+            <!-- Empty State: No Matches -->
+            <div v-else-if="filteredGists.length === 0" class="flex flex-center q-py-xl">
+              <div class="text-center q-pa-md" style="max-width: 400px">
+                <q-icon name="mdi-magnify-close" size="64px" color="grey-5" />
+                <h5 class="text-h6 q-mt-md q-mb-sm">No Matches Found</h5>
+                <p class="text-subtitle2 text-grey-7 q-mb-md">
+                  <template v-if="searchQuery">
+                    No gists match "{{ searchQuery }}"
+                  </template>
+                  <template v-else>
+                    No gists match the current filters
+                  </template>
+                </p>
+                <div v-if="searchQuery && !searchStore.includeContent" class="q-mb-md">
+                  <q-checkbox
+                    :model-value="searchStore.includeContent"
+                    @update:model-value="handleIncludeContentChange"
+                    label="Search file content"
+                    color="primary"
+                  />
+                  <div class="text-caption text-grey-6 q-mt-xs">
+                    <q-icon name="mdi-information-outline" size="14px" class="q-mr-xs" />
+                    Slower but searches inside code
+                  </div>
+                </div>
+                <div class="q-gutter-sm">
+                  <q-btn
+                    v-if="searchQuery"
+                    outline
+                    color="primary"
+                    label="Clear Search"
+                    size="sm"
+                    @click="searchQuery = ''"
+                  />
+                  <q-btn
+                    v-if="searchStore.hasActiveFilters"
+                    outline
+                    color="grey"
+                    label="Clear Filters"
+                    size="sm"
+                    @click="searchStore.clearFilters()"
+                  />
+                </div>
+              </div>
+            </div>
+
             <!-- List View -->
             <q-virtual-scroll
               v-else-if="uiStore.isListView"
@@ -673,7 +719,7 @@ const filteredGists = computed(() => {
 
   const query = searchQuery.value.trim()
   if (query && query.length >= 2) {
-    const searchResults = searchService.search(query)
+    const searchResults = searchService.search(query, searchStore.includeContent)
     const searchResultIds = new Set(searchResults.map(g => g.id))
     gists = gists.filter(g => searchResultIds.has(g.id))
   }
@@ -848,6 +894,11 @@ async function handleSync() {
       icon: 'error'
     })
   }
+}
+
+function handleIncludeContentChange(value: boolean) {
+  searchStore.setIncludeContent(value)
+  // filteredGists computed will automatically re-evaluate
 }
 
 async function handlePullToRefresh(done: () => void) {
