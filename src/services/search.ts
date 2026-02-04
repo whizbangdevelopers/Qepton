@@ -14,6 +14,7 @@ interface SearchableGist {
   description: string
   language: string
   filename: string
+  content: string
   // Keep reference to original gist for easy retrieval
   _gist: Gist
 }
@@ -35,8 +36,21 @@ const fuseOptions: IFuseOptions<SearchableGist> = {
   findAllMatches: true
 }
 
+// Options with content included (slower but more comprehensive)
+const fuseOptionsWithContent: IFuseOptions<SearchableGist> = {
+  ...fuseOptions,
+  keys: [
+    { name: 'id', weight: 0.2 },
+    { name: 'description', weight: 0.3 },
+    { name: 'language', weight: 0.1 },
+    { name: 'filename', weight: 0.1 },
+    { name: 'content', weight: 0.3 }
+  ]
+}
+
 class SearchService {
   private fuse: Fuse<SearchableGist> | null = null
+  private fuseWithContent: Fuse<SearchableGist> | null = null
   private fuseIndex: SearchableGist[] = []
 
   /**
@@ -47,6 +61,7 @@ class SearchService {
 
     this.fuseIndex = this.flattenGistsForSearch(gistArray)
     this.fuse = new Fuse(this.fuseIndex, fuseOptions)
+    this.fuseWithContent = new Fuse(this.fuseIndex, fuseOptionsWithContent)
 
     console.debug(`[Search] Index built with ${this.fuseIndex.length} searchable items`)
   }
@@ -68,6 +83,7 @@ class SearchService {
           description: gist.description || '',
           language: '',
           filename: '',
+          content: '',
           _gist: gist
         })
       } else {
@@ -79,6 +95,7 @@ class SearchService {
             description: gist.description || '',
             language: file.language || '',
             filename: filename,
+            content: file.content || '',
             _gist: gist
           })
         })
@@ -152,15 +169,17 @@ class SearchService {
 
   /**
    * Search gists by query string (fuzzy or regex)
+   * @param query - Search query
+   * @param includeContent - Include file content in fuzzy search (slower)
    */
-  search(query: string): Gist[] {
+  search(query: string, includeContent = false): Gist[] {
     const trimmedQuery = query.trim()
 
     if (!trimmedQuery || trimmedQuery.length <= 1) {
       return []
     }
 
-    // Check for regex pattern
+    // Check for regex pattern (always searches content)
     if (this.isRegexQuery(trimmedQuery)) {
       const regex = this.parseRegex(trimmedQuery)
       if (regex) {
@@ -172,12 +191,13 @@ class SearchService {
       console.warn(`[Search] Invalid regex pattern: ${trimmedQuery}`)
     }
 
-    if (!this.fuse) {
+    const fuseInstance = includeContent ? this.fuseWithContent : this.fuse
+    if (!fuseInstance) {
       console.warn('[Search] Search index not initialized')
       return []
     }
 
-    const results = this.fuse.search(trimmedQuery)
+    const results = fuseInstance.search(trimmedQuery)
 
     // Deduplicate gists (same gist might match multiple files)
     const seenGistIds = new Set<string>()
@@ -191,7 +211,7 @@ class SearchService {
       }
     })
 
-    console.debug(`[Search] Query "${query}" returned ${uniqueGists.length} results`)
+    console.debug(`[Search] Query "${query}" (content: ${includeContent}) returned ${uniqueGists.length} results`)
 
     return uniqueGists
   }
@@ -203,8 +223,9 @@ class SearchService {
     const newItems = this.flattenGistsForSearch([gist])
     this.fuseIndex.push(...newItems)
 
-    // Rebuild Fuse instance with updated index
+    // Rebuild Fuse instances with updated index
     this.fuse = new Fuse(this.fuseIndex, fuseOptions)
+    this.fuseWithContent = new Fuse(this.fuseIndex, fuseOptionsWithContent)
 
     console.debug(`[Search] Added gist ${gist.id} to index`)
   }
@@ -220,8 +241,9 @@ class SearchService {
     const newItems = this.flattenGistsForSearch([gist])
     this.fuseIndex.push(...newItems)
 
-    // Rebuild Fuse instance
+    // Rebuild Fuse instances
     this.fuse = new Fuse(this.fuseIndex, fuseOptions)
+    this.fuseWithContent = new Fuse(this.fuseIndex, fuseOptionsWithContent)
 
     console.debug(`[Search] Updated gist ${gist.id} in index`)
   }
@@ -232,8 +254,9 @@ class SearchService {
   removeFromIndex(gistId: string): void {
     this.fuseIndex = this.fuseIndex.filter(item => item.id !== gistId)
 
-    // Rebuild Fuse instance
+    // Rebuild Fuse instances
     this.fuse = new Fuse(this.fuseIndex, fuseOptions)
+    this.fuseWithContent = new Fuse(this.fuseIndex, fuseOptionsWithContent)
 
     console.debug(`[Search] Removed gist ${gistId} from index`)
   }
@@ -244,6 +267,7 @@ class SearchService {
   resetIndex(): void {
     this.fuseIndex = []
     this.fuse = null
+    this.fuseWithContent = null
 
     console.debug('[Search] Index reset')
   }

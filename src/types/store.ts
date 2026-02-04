@@ -190,6 +190,7 @@ export interface SearchState {
   isSearching: boolean
   savedSearches: SavedSearch[]
   filters: SearchFilters
+  includeContent: boolean
 }
 
 // ============================================================================
