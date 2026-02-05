@@ -403,22 +403,67 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
 
+      - name: Wait for CDN propagation
+        run: |
+          echo "Waiting 30s for GitHub CDN to propagate release assets..."
+          sleep 30
+
       - name: Calculate AppImage hash
         id: hash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${{ github.ref_name }}"
           VERSION="${VERSION#v}"  # Remove 'v' prefix
+          APPIMAGE_NAME="Qepton-${VERSION}.AppImage"
+          APPIMAGE_URL="https://github.com/whizbangdevelopers-org/Qepton/releases/download/v${VERSION}/${APPIMAGE_NAME}"
 
-          # Download AppImage from FREE repo (where NUR package fetches from)
-          APPIMAGE_URL="https://github.com/whizbangdevelopers-org/Qepton/releases/download/v${VERSION}/Qepton-${VERSION}.AppImage"
+          echo "Verifying AppImage exists on Free repo..."
+
+          # Verify asset exists via API (more reliable than direct download)
+          ASSET_SIZE=$(gh api repos/whizbangdevelopers-org/Qepton/releases/tags/v${VERSION} \
+            --jq ".assets[] | select(.name == \"${APPIMAGE_NAME}\") | .size" 2>/dev/null || echo "0")
+
+          if [ "$ASSET_SIZE" = "0" ] || [ -z "$ASSET_SIZE" ]; then
+            echo "❌ AppImage not found in Free repo release assets"
+            echo "Available assets:"
+            gh api repos/whizbangdevelopers-org/Qepton/releases/tags/v${VERSION} --jq '.assets[].name' || true
+            exit 1
+          fi
+
+          echo "✓ Found AppImage (size: ${ASSET_SIZE} bytes)"
+
+          # Download with retries
           echo "Downloading from free repo: $APPIMAGE_URL"
+          for attempt in 1 2 3; do
+            echo "Download attempt $attempt/3..."
+            curl -L --retry 3 --retry-delay 5 -o Qepton.AppImage "$APPIMAGE_URL"
 
-          curl -L -o Qepton.AppImage "$APPIMAGE_URL"
+            # Verify download size matches API-reported size
+            DOWNLOADED_SIZE=$(stat -c%s Qepton.AppImage 2>/dev/null || stat -f%z Qepton.AppImage)
+            echo "Downloaded size: $DOWNLOADED_SIZE bytes"
+
+            if [ "$DOWNLOADED_SIZE" = "$ASSET_SIZE" ]; then
+              echo "✓ Download verified (size matches)"
+              break
+            else
+              echo "⚠ Size mismatch: expected $ASSET_SIZE, got $DOWNLOADED_SIZE"
+              if [ "$attempt" -lt 3 ]; then
+                echo "Waiting 10s before retry..."
+                sleep 10
+              else
+                echo "❌ Download verification failed after 3 attempts"
+                exit 1
+              fi
+            fi
+          done
+
+          # Calculate hash
           HASH=$(nix hash file --sri Qepton.AppImage)
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "Calculated hash: $HASH"
+          echo "✓ Calculated hash: $HASH"
 
       - name: Trigger NUR update
         run: |
