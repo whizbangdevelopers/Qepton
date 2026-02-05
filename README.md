@@ -271,7 +271,7 @@ We test release artifacts on real hardware and VMs before publishing. This matri
 | rpm           | Fedora         | Fedora VM (KVM)     | ⏳     | v1.0.12       |
 | Flatpak       | Linux          | Fedora VM (KVM)     | ⏳     | v1.0.12       |
 | pacman        | Arch Linux     | Arch VM (KVM)       | ⏳     | v1.0.12       |
-| Nix/NUR       | NixOS/Linux    | NixOS Laptop        | ⏳     | v1.0.12       |
+| Nix/NUR       | NixOS/Linux    | NixOS Laptop        | ⏳     | v1.0.20       |
 | PWA           | Web            | GitHub Pages        | ✅     | v1.0.22       |
 | iOS           | Mobile         | —                   | 🔮     | —             |
 | Android       | Mobile         | —                   | 🔮     | —             |
