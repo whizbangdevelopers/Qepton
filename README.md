@@ -261,17 +261,17 @@ We test release artifacts on real hardware and VMs before publishing. This matri
 <!-- VERIFICATION-TABLE-START -->
 | Format        | Platform       | Test Environment    | Status | Last Verified |
 | ------------- | -------------- | ------------------- | ------ | ------------- |
-| NSIS (.exe)   | Windows x64    | Win10 Laptop        | ⏳     | —             |
-| Portable .7z  | Windows x64    | Win10 Laptop        | ⏳     | —             |
-| DMG           | macOS arm64    | Mac Mini M1         | ⏳     | —             |
+| NSIS (.exe)   | Windows x64    | Win10 Laptop        | ⏳     | v1.0.12       |
+| Portable .7z  | Windows x64    | Win10 Laptop        | ⏳     | v1.0.12       |
+| DMG           | macOS arm64    | Mac Mini M1         | ⏳     | v1.0.12       |
 | DMG           | macOS x64      | —                   | ⏸️     | —             |
-| AppImage      | Linux x64      | Ubuntu Laptop       | ⏳     | —             |
-| deb           | Debian/Ubuntu  | Ubuntu Laptop       | ⏳     | —             |
-| snap          | Ubuntu         | Ubuntu Laptop       | ⏳     | —             |
-| rpm           | Fedora         | Fedora VM (KVM)     | ⏳     | —             |
-| Flatpak       | Linux          | Fedora VM (KVM)     | ⏳     | —             |
-| pacman        | Arch Linux     | Arch VM (KVM)       | ⏳     | —             |
-| Nix/NUR       | NixOS/Linux    | NixOS Laptop        | ⏳     | —             |
+| AppImage      | Linux x64      | Ubuntu Laptop       | ⏳     | v1.0.12       |
+| deb           | Debian/Ubuntu  | Ubuntu Laptop       | ⏳     | v1.0.12       |
+| snap          | Ubuntu         | Ubuntu Laptop       | ⏳     | v1.0.12       |
+| rpm           | Fedora         | Fedora VM (KVM)     | ⏳     | v1.0.12       |
+| Flatpak       | Linux          | Fedora VM (KVM)     | ⏳     | v1.0.12       |
+| pacman        | Arch Linux     | Arch VM (KVM)       | ⏳     | v1.0.12       |
+| Nix/NUR       | NixOS/Linux    | NixOS Laptop        | ⏳     | v1.0.12       |
 | PWA           | Web            | GitHub Pages        | ✅     | v1.0.22       |
 | iOS           | Mobile         | —                   | 🔮     | —             |
 | Android       | Mobile         | —                   | 🔮     | —             |
