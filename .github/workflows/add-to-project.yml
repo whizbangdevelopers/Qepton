@@ -2,14 +2,14 @@ name: Add to Project
 
 # Auto-adds issues to GitHub Project and sets fields based on labels
 # Requires: PROJECT_PAT secret with 'project' scope
-# Project URL format: https://github.com/orgs/whizbangdevelopers/projects/NUMBER
+# Project URL format: https://github.com/orgs/whizbangdevelopers-org/projects/NUMBER
 
 on:
   issues:
     types: [opened, labeled]
 
 env:
-  PROJECT_URL: https://github.com/users/whizbangdevelopers/projects/1
+  PROJECT_URL: https://github.com/orgs/whizbangdevelopers-org/projects/1
 
 jobs:
   add-to-project:
@@ -83,8 +83,8 @@ jobs:
 
           # Query for project node ID and field IDs
           PROJECT_DATA=$(gh api graphql -f query='
-            query($user: String!, $number: Int!) {
-              user(login: $user) {
+            query($org: String!, $number: Int!) {
+              organization(login: $org) {
                 projectV2(number: $number) {
                   id
                   fields(first: 20) {
@@ -102,9 +102,9 @@ jobs:
                 }
               }
             }
-          ' -f user="whizbangdevelopers" -F number="$PROJECT_NUMBER")
+          ' -f org="whizbangdevelopers-org" -F number="$PROJECT_NUMBER")
 
-          PROJECT_ID=$(echo "$PROJECT_DATA" | jq -r '.data.user.projectV2.id')
+          PROJECT_ID=$(echo "$PROJECT_DATA" | jq -r '.data.organization.projectV2.id')
 
           # Function to get field and option IDs
           get_field_option() {
@@ -112,10 +112,10 @@ jobs:
             local option_name="$2"
 
             FIELD_ID=$(echo "$PROJECT_DATA" | jq -r --arg name "$field_name" \
-              '.data.user.projectV2.fields.nodes[] | select(.name == $name) | .id')
+              '.data.organization.projectV2.fields.nodes[] | select(.name == $name) | .id')
 
             OPTION_ID=$(echo "$PROJECT_DATA" | jq -r --arg name "$field_name" --arg opt "$option_name" \
-              '.data.user.projectV2.fields.nodes[] | select(.name == $name) | .options[] | select(.name == $opt) | .id')
+              '.data.organization.projectV2.fields.nodes[] | select(.name == $name) | .options[] | select(.name == $opt) | .id')
 
             echo "$FIELD_ID|$OPTION_ID"
           }
